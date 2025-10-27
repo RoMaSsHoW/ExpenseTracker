@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {}
+    "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {}
   },
   "projects": {
-    "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {
+    "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj",
+        "projectUniqueName": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj",
         "projectName": "ExpenseTracker.Domain",
-        "projectPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj",
+        "projectPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj",
         "packagesPath": "/home/roma/.nuget/packages/",
-        "outputPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/obj/",
+        "outputPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/roma/.nuget/NuGet/NuGet.Config"

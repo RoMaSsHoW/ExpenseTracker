@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vG9xecaQUP0=",
+  "dgSpecHash": "6e5lySLTCnY=",
   "success": true,
-  "projectFilePath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj",
+  "projectFilePath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

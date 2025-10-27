@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "t0rFdUEPO/A=",
+  "dgSpecHash": "5mHstdKpeXg=",
   "success": true,
-  "projectFilePath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
+  "projectFilePath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

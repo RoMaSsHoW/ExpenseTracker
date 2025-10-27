@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BTmA1872g/M=",
+  "dgSpecHash": "Bi/KnFj2mXM=",
   "success": true,
-  "projectFilePath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
+  "projectFilePath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
   "expectedPackageFiles": [
     "/home/roma/.nuget/packages/aspnetcore.swaggerui.themes/2.0.0/aspnetcore.swaggerui.themes.2.0.0.nupkg.sha512",
     "/home/roma/.nuget/packages/microsoft.extensions.apidescription.server/9.0.0/microsoft.extensions.apidescription.server.9.0.0.nupkg.sha512",

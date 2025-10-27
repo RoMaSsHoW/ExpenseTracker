@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
+      "projectUniqueName": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
       "projectName": "ExpenseTracker.Infrastructure",
-      "projectPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
+      "projectPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Infrastructure/ExpenseTracker.Infrastructure.csproj",
       "packagesPath": "/home/roma/.nuget/packages/",
-      "outputPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Infrastructure/obj/",
+      "outputPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Infrastructure/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/roma/.nuget/NuGet/NuGet.Config"
@@ -52,8 +52,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {
-              "projectPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj"
+            "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj": {
+              "projectPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Domain/ExpenseTracker.Domain.csproj"
             }
           }
         }

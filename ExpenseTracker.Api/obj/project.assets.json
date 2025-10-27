@@ -545,11 +545,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
+      "projectUniqueName": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
       "projectName": "ExpenseTracker.Api",
-      "projectPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
+      "projectPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
       "packagesPath": "/home/roma/.nuget/packages/",
-      "outputPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Api/obj/",
+      "outputPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Api/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/roma/.nuget/NuGet/NuGet.Config"
@@ -565,8 +565,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj": {
-              "projectPath": "/home/roma/Projects/Tracker/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj"
+            "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj": {
+              "projectPath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj"
             }
           }
         }
