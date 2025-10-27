@@ -1,0 +1,40 @@
+﻿networks:
+  expense_tracker_network:
+    driver: bridge
+  nginxproxy_default:
+    external: true
+
+volumes:
+  expense_tracker_data:
+
+services:
+  expensetracker.api:
+    image: romansakh14/expense_tracker:latest
+    container_name: expense_tracker_api
+    restart: always
+    build:
+      context: .
+      dockerfile: ExpenseTracker.Api/Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    networks:
+      - expense_tracker_network
+      - nginxproxy_default
+    depends_on:
+      - postgres_db
+    
+  postgres_db:
+    image: postgres:latest
+    container_name: expense_tracker_db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - expense_tracker_data:/var/lib/postgresql/data
+    networks:
+      - expense_tracker_network
+    
