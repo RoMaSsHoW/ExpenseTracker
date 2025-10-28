@@ -4,8 +4,8 @@ namespace ExpenseTracker.Domain.TransactionAggregate.ValueObjects;
 
 public class TransactionType : Enumeration
 {
-    public static readonly TransactionType Income = new TransactionType(1, "Income");
-    public static readonly TransactionType Outcome = new TransactionType(2, "Outcome");
+    public static readonly TransactionType Income = new TransactionType(1, nameof(Income));
+    public static readonly TransactionType Expense = new TransactionType(2, nameof(Expense));
     
     public TransactionType(int id, string name) 
         : base(id, name)
