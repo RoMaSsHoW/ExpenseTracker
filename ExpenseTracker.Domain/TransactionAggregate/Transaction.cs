@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using ExpenseTracker.Domain.Common.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
 using ExpenseTracker.Domain.TransactionAggregate.ValueObjects;
@@ -20,8 +19,17 @@ public class Transaction : Entity
     public TransactionType TransactionType { get; private set; }
     public TransactionSource TransactionSource { get; private set; }
     public Guid AccountId { get; private set; }
-    public DateTime CreatedAt { get; private set; }
     public DateTime Date { get; private set; }
-    public bool IsRecurring  { get; private set; }
+    public DateTime CreatedAt { get; private set; }
     public Category? Category { get; private set; }
+
+    public static Transaction CreateManual()
+    {
+        return new Transaction();
+    }
+    
+    public static Transaction CreateAuto()
+    {
+        return new Transaction();
+    }
 }

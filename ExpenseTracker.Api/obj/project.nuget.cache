@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "Bi/KnFj2mXM=",
+  "dgSpecHash": "9uQXrZCSS9g=",
   "success": true,
   "projectFilePath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Api/ExpenseTracker.Api.csproj",
   "expectedPackageFiles": [
     "/home/roma/.nuget/packages/aspnetcore.swaggerui.themes/2.0.0/aspnetcore.swaggerui.themes.2.0.0.nupkg.sha512",
+    "/home/roma/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/roma/.nuget/packages/microsoft.extensions.apidescription.server/9.0.0/microsoft.extensions.apidescription.server.9.0.0.nupkg.sha512",
     "/home/roma/.nuget/packages/microsoft.openapi/1.6.25/microsoft.openapi.1.6.25.nupkg.sha512",
     "/home/roma/.nuget/packages/swashbuckle.aspnetcore/9.0.6/swashbuckle.aspnetcore.9.0.6.nupkg.sha512",

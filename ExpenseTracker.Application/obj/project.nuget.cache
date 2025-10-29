@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "6e5lySLTCnY=",
+  "dgSpecHash": "v2IrUHtdD6c=",
   "success": true,
   "projectFilePath": "/home/roma/Projects/ExpenseTracker/ExpenseTracker.Application/ExpenseTracker.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/roma/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
