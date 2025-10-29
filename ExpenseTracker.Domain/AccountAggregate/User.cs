@@ -6,7 +6,9 @@ namespace ExpenseTracker.Domain.AccountAggregate;
 
 public class User : Entity
 {
-    protected User(
+    public User() { }
+    
+    private User(
         string firstName,
         string lastName,
         string email,
