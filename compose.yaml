@@ -1,8 +1,8 @@
 ﻿networks:
   expense_tracker_network:
     driver: bridge
-#  nginxproxy_default:
-#    external: true
+  nginxproxy_default:
+    external: true
 
 volumes:
   expense_tracker_data:
@@ -22,7 +22,7 @@ services:
       - "8081:8081"
     networks:
       - expense_tracker_network
-#      - nginxproxy_default
+      - nginxproxy_default
     depends_on:
       - postgres_db
     
