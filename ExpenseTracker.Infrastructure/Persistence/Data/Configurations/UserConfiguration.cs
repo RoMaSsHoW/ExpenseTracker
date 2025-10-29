@@ -1,0 +1,68 @@
+using ExpenseTracker.Domain.AccountAggregate;
+using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+using ExpenseTracker.Domain.SeedWork;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace ExpenseTracker.Infrastructure.Persistence.Data.Configurations;
+
+public class UserConfiguration : IEntityTypeConfiguration<User>
+{
+    public void Configure(EntityTypeBuilder<User> builder)
+    {
+        builder.ToTable("users");
+        builder.HasKey(u => u.Id);
+
+        builder.Property(u => u.Id)
+            .HasColumnName("id")
+            .ValueGeneratedNever()
+            .IsRequired();
+        
+        builder.Property(u => u.FirstName)
+            .HasColumnName("first_name")
+            .IsRequired();
+        
+        builder.Property(u => u.LastName)
+            .HasColumnName("last_name")
+            .IsRequired();
+
+        builder.OwnsOne(u => u.Email, email =>
+        {
+            email.Property(e => e.Address)
+                .HasColumnName("email_address")
+                .IsRequired();
+
+            email.HasIndex(e => e.Address).IsUnique();
+        });
+
+        builder.Property(u => u.EmailIsConfirmed)
+            .HasColumnName("email_is_confirmed")
+            .HasDefaultValue(false);
+
+        builder.OwnsOne(u => u.Password, password =>
+        {
+            password.Property(p => p.PasswordHash)
+                .HasColumnName("password_hash")
+                .IsRequired();
+        });
+        
+        builder.Property(u => u.Role)
+            .HasConversion(
+                r => r.Name,
+                name => Enumeration.FromName<Role>(name))
+            .HasColumnName("role")
+            .IsRequired();
+        
+        builder.Property(u => u.RefreshToken)
+            .HasColumnName("refresh_token")
+            .IsRequired();
+        
+        builder.Property(u => u.RefreshTokenExpiryDate)
+            .HasColumnName("refresh_token_expiry_date")
+            .IsRequired();
+        
+        builder.Property(u => u.CreatedAt)
+            .HasColumnName("created_at")
+            .IsRequired();
+    }
+}
