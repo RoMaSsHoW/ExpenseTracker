@@ -1,27 +1,27 @@
+using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.Interfaces;
-using ExpenseTracker.Infrastructure.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly AppDbContext _dbContext;
-    
-    public UserRepository(AppDbContext dbContext)
+    private readonly IAppDbContext _dbContext;
+
+    public UserRepository(IAppDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    
+
     public async Task<User?> FindByEmailAsync(string email)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new ArgumentNullException(nameof(email), "Email cannot be null or empty");
-        
+
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.Email.Address ==  email);
-        
+            .FirstOrDefaultAsync(u => u.Email.Address == email);
+
         return user;
     }
 
@@ -29,10 +29,10 @@ public class UserRepository : IUserRepository
     {
         if (string.IsNullOrWhiteSpace(refreshToken))
             throw new ArgumentNullException(nameof(refreshToken), "Refresh token cannot be null or empty");
-        
+
         var user = await _dbContext.Users
-            .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
-        
+            .FirstOrDefaultAsync(u => u.RefreshToken.Token == refreshToken);
+
         return user;
     }
 
@@ -40,10 +40,10 @@ public class UserRepository : IUserRepository
     {
         if (userId == Guid.Empty)
             throw new ArgumentNullException(nameof(userId), "UserId cannot be null or empty");
-        
+
         var user = await _dbContext.Users
             .FirstOrDefaultAsync(u => u.Id == userId);
-        
+
         return user;
     }
 

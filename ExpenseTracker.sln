@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36212.18 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Api", "ExpenseTracker.Api\ExpenseTracker.Api.csproj", "{DEC091DB-B9EF-43C3-85B0-B4DC89641627}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Domain", "ExpenseTracker.Domain\ExpenseTracker.Domain.csproj", "{2E6B363E-362D-4443-BE2B-0B4BEA587C3B}"
@@ -35,5 +38,11 @@ Global
 		{F947E495-BBD0-4894-B0B2-BC668F4FCADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F947E495-BBD0-4894-B0B2-BC668F4FCADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F947E495-BBD0-4894-B0B2-BC668F4FCADC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {08661806-CCB1-45BF-BE49-EE988A47EAF7}
 	EndGlobalSection
 EndGlobal

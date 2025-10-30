@@ -1,7 +1,7 @@
 using AspNetCore.Swagger.Themes;
 using ExpenseTracker.Api.Extentions;
+using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Infrastructure.Persistence.Data;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,8 +41,8 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await dbContext.Database.MigrateAsync();
+    var dbContext = scope.ServiceProvider.GetRequiredService<IAppDbContext>();
+    await dbContext.MigrateAsync();
 
     var seeder = scope.ServiceProvider.GetRequiredService<Seeder>();
     await seeder.RunAsync();

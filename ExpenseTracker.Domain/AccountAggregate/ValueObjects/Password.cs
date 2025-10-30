@@ -11,7 +11,7 @@ public class Password : ValueObject
         if (string.IsNullOrEmpty(password))
             throw new ArgumentNullException(nameof(password), "Password cannot be empty");
         
-        PasswordHash = BCrypt.Net.BCrypt.HashPassword(password);
+        PasswordHash = BCrypt.Net.BCrypt.HashPassword(password.Trim());
     }
     
     public string PasswordHash { get; private set; }

@@ -33,6 +33,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .IsRequired();
 
             email.HasIndex(e => e.Address).IsUnique();
+
+            email.WithOwner();
         });
 
         builder.Property(u => u.EmailIsConfirmed)
@@ -44,6 +46,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             password.Property(p => p.PasswordHash)
                 .HasColumnName("password_hash")
                 .IsRequired();
+
+            password.WithOwner();
         });
         
         builder.Property(u => u.Role)
@@ -52,15 +56,20 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 name => Enumeration.FromName<Role>(name))
             .HasColumnName("role")
             .IsRequired();
-        
-        builder.Property(u => u.RefreshToken)
-            .HasColumnName("refresh_token")
-            .IsRequired();
-        
-        builder.Property(u => u.RefreshTokenExpiryDate)
-            .HasColumnName("refresh_token_expiry_date")
-            .IsRequired();
-        
+
+        builder.OwnsOne(u => u.RefreshToken, refreshToken =>
+        {
+            refreshToken.Property(rt => rt.Token)
+                .HasColumnName("refresh_token")
+                .IsRequired();
+
+            refreshToken.Property(rt => rt.ExpireDate)
+                .HasColumnName("refresh_token_expiry_date")
+                .IsRequired();
+
+            refreshToken.WithOwner();
+        });
+
         builder.Property(u => u.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

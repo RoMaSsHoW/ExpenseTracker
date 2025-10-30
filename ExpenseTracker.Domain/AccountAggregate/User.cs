@@ -14,8 +14,7 @@ public class User : Entity
         string email,
         string password,
         int roleId,
-        string refreshToken,
-        DateTime refreshTokenExpiryDate)
+        RefreshToken refreshToken)
     {
         FirstName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstName.Trim().ToLower());
         LastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastName.Trim().ToLower());
@@ -24,7 +23,6 @@ public class User : Entity
         Password = new Password(password);
         Role = Enumeration.FromId<Role>(roleId);
         RefreshToken = refreshToken;
-        RefreshTokenExpiryDate =  refreshTokenExpiryDate;
         CreatedAt = DateTime.UtcNow;
     }
     
@@ -34,8 +32,7 @@ public class User : Entity
     public bool EmailIsConfirmed { get; private set; }
     public Password Password { get; private set; }
     public Role Role { get; private set; }
-    public string RefreshToken { get; private set; }
-    public DateTime RefreshTokenExpiryDate { get; private set; }
+    public RefreshToken RefreshToken { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
     public static User Registration(
@@ -44,17 +41,12 @@ public class User : Entity
         string email,
         string password,
         int roleId,
-        string refreshToken,
-        DateTime refreshTokenExpiryDate)
+        RefreshToken refreshToken)
     {
         if (string.IsNullOrWhiteSpace(firstName))
             throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
         if (string.IsNullOrWhiteSpace(lastName))
             throw new ArgumentException("Last name cannot be null or whitespace.", nameof(lastName));
-        if (string.IsNullOrWhiteSpace(refreshToken))
-            throw new ArgumentException("Refresh token cannot be null or whitespace.", nameof(refreshToken));
-        if (refreshTokenExpiryDate < DateTime.UtcNow)
-            throw new ArgumentException("Refresh token has already expired.");
         
         return new User(
             firstName, 
@@ -62,8 +54,7 @@ public class User : Entity
             email,
             password,
             roleId,
-            refreshToken,
-            refreshTokenExpiryDate);
+            refreshToken);
     }
     
     public bool Verify(string password)
@@ -75,15 +66,7 @@ public class User : Entity
         string refreshToken,
         DateTime refreshTokenExpiryDate)
     {
-        if (string.IsNullOrWhiteSpace(refreshToken))
-            throw new ArgumentException("RefreshToken cannot be null or whitespace.");
-        if (RefreshToken ==  refreshToken)
-            throw new ArgumentException("RefreshToken has already been changed.");
-        if (refreshTokenExpiryDate < DateTime.UtcNow)
-            throw new ArgumentException("Refresh token has already expired.");
-        
-        RefreshToken = refreshToken;
-        RefreshTokenExpiryDate = refreshTokenExpiryDate;
+        RefreshToken = new RefreshToken(refreshToken, refreshTokenExpiryDate);
     }
 
     public void ChangeProfile(

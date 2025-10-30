@@ -1,19 +1,36 @@
+using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Domain.AccountAggregate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IAppDbContext
 {
-    public AppDbContext(DbContextOptions options) 
+    public AppDbContext(DbContextOptions<AppDbContext> options) 
         : base(options) 
     { }
     
     public DbSet<User> Users => Set<User>();
 
+    public async Task MigrateAsync()
+    {
+        await Database.MigrateAsync();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
+    public override EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
+    {
+        return base.Entry(entity);
     }
 }

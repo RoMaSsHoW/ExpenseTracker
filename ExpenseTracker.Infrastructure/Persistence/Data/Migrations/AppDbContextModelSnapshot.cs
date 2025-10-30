@@ -48,15 +48,6 @@ namespace ExpenseTracker.Infrastructure.Persistence.Data.Migrations
                         .HasColumnType("text")
                         .HasColumnName("last_name");
 
-                    b.Property<string>("RefreshToken")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("refresh_token");
-
-                    b.Property<DateTime>("RefreshTokenExpiryDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("refresh_token_expiry_date");
-
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("text")
@@ -108,10 +99,35 @@ namespace ExpenseTracker.Infrastructure.Persistence.Data.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.OwnsOne("ExpenseTracker.Domain.AccountAggregate.ValueObjects.RefreshToken", "RefreshToken", b1 =>
+                        {
+                            b1.Property<Guid>("UserId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("ExpireDate")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("refresh_token_expiry_date");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("refresh_token");
+
+                            b1.HasKey("UserId");
+
+                            b1.ToTable("users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserId");
+                        });
+
                     b.Navigation("Email")
                         .IsRequired();
 
                     b.Navigation("Password")
+                        .IsRequired();
+
+                    b.Navigation("RefreshToken")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

@@ -16,6 +16,10 @@ services:
       context: .
       dockerfile: ExpenseTracker.Api/Dockerfile
     environment:
+      - JWTSettings__Key=${JWTSettings__Key}
+      - JWTSettings__Issuer=${JWTSettings__Issuer}
+      - JWTSettings__Audience=${JWTSettings__Audience}
+      - JWTSettings__ExpireTime=${JWTSettings__ExpireTime}
       - ConnectionStrings__PostgresqlDbConnection=${ConnectionStrings__PostgresqlDbConnection}
     ports:
       - "8080:8080"
