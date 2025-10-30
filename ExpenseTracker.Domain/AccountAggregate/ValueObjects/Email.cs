@@ -13,7 +13,7 @@ public class Email : ValueObject
         if (!address.Contains("@"))
             throw new ArgumentOutOfRangeException(nameof(address), "Invalid email address");
         
-        Address = address.ToLower();
+        Address = address.Trim().ToLower();
     }
     
     public string Address { get; }

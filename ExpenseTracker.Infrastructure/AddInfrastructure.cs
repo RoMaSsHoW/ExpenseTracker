@@ -15,6 +15,8 @@ public static class AddInfrastructure
         {
             options.UseNpgsql(configuration.GetConnectionString("PostgresqlDbConnection"));
         });
+
+        services.AddScoped<Seeder>();
         
         return services;
     }
