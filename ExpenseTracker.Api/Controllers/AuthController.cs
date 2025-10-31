@@ -2,7 +2,6 @@ using ExpenseTracker.Application.Commands.AuthCommands;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.AccountDTOs;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Api.Controllers;
@@ -14,7 +13,7 @@ public class AuthController : BaseApiController
     { }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
+    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
     {
         if (!ModelState.IsValid)
         {
@@ -39,11 +38,38 @@ public class AuthController : BaseApiController
             return StatusCode(response.StatusCode, response);
         }
     }
-    
-    [HttpPost("test")]
-    [Authorize(Roles = "Admin")]
-    public ActionResult Test()
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
     {
-        return Ok("hello");
+        try
+        {
+            var command = new RegistrationCommand(registerDto);
+            var result = await Mediator.Send(command);
+            var response = Response<AuthResponse>.Success(result, "Success", 201);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshAccessTiken([FromBody] string refreshToken)
+    {
+        try
+        {
+            var command = new RefreshAccessTokenCommand(refreshToken);
+            var result = await Mediator.Send(command);
+            var response = Response<AuthResponse>.Success(result, "Success", 201);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }        
     }
 }
