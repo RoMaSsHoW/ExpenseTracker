@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
+using ExpenseTracker.Application;
 
 namespace ExpenseTracker.Api.Extentions;
 
@@ -18,6 +19,8 @@ public static class ServiceExtensions
 
         services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
 
+        services.AddApplicationServices();
+        
         services.AddTransient<AuthorizationFixMiddleware>();
 
         return services;
@@ -61,7 +64,7 @@ public static class ServiceExtensions
                         {
                             errors = new
                             {
-                                message = "Пользователь не авторизован. Пожалуйста, войдите в систему."
+                                message = "Unauthorized: С‚РѕРєРµРЅ РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚, РїСЂРѕСЃСЂРѕС‡РµРЅ РёР»Рё РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ."
                             }
                         });
 
@@ -77,7 +80,7 @@ public static class ServiceExtensions
                         {
                             errors = new
                             {
-                                message = "Доступ запрещён. У вас нет прав для выполнения этого действия."
+                                message = "Forbidden: Сѓ РІР°СЃ РЅРµС‚ РґРѕСЃС‚СѓРїР° Рє СЌС‚РѕРјСѓ СЂРµСЃСѓСЂСЃСѓ."
                             }
                         });
 
@@ -93,7 +96,7 @@ public static class ServiceExtensions
                         {
                             errors = new
                             {
-                                message = "Ошибка аутентификации: " + context.Exception.Message
+                                message = "Authentication failed: " + context.Exception.Message
                             }
                         });
 

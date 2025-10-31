@@ -22,6 +22,8 @@ public static class AddInfrastructure
 
         services.AddScoped<Seeder>();
         services.AddScoped<IUserRepository, UserRepository>();
+        
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<ITokenService, TokenService>();
 
         return services;

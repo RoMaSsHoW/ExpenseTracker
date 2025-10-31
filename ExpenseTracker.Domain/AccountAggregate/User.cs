@@ -62,11 +62,9 @@ public class User : Entity
         return BCrypt.Net.BCrypt.Verify(password, Password.PasswordHash);
     }
     
-    public void ChangeRefreshToken(
-        string refreshToken,
-        DateTime refreshTokenExpiryDate)
+    public void ChangeRefreshToken(RefreshToken refreshToken)
     {
-        RefreshToken = new RefreshToken(refreshToken, refreshTokenExpiryDate);
+        RefreshToken = refreshToken;
     }
 
     public void ChangeProfile(
