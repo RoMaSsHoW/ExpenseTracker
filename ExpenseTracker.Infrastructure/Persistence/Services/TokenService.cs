@@ -55,7 +55,7 @@ namespace ExpenseTracker.Infrastructure.Persistence.Services
 
         public bool IsRefreshTokenExpired(User user)
         {
-            return user.RefreshToken.ExpireDate <= DateTime.UtcNow;
+            return user.RefreshToken.ExpireDate < DateTime.UtcNow;
         }
     }
 }
