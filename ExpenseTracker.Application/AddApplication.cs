@@ -7,6 +7,7 @@ public static class AddApplication
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        
         ConfigureMediatR(services);
         
         return services;

@@ -36,9 +36,9 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User?> FindById(Guid userId)
+    public async Task<User?> FindById(Guid? userId)
     {
-        if (userId == Guid.Empty)
+        if (userId == Guid.Empty && userId is null)
             throw new ArgumentNullException(nameof(userId), "UserId cannot be null or empty");
 
         var user = await _dbContext.Users

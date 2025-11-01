@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
+using ExpenseTracker.Api.Common.Persistence;
 using ExpenseTracker.Application;
+using ExpenseTracker.Application.Common.Persistence;
 
 namespace ExpenseTracker.Api.Extentions;
 
@@ -19,6 +21,10 @@ public static class ServiceExtensions
 
         services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
 
+        services.AddHttpContextAccessor();
+
+        services.AddScoped<IHttpAccessor, HttpAccessor>();
+        
         services.AddApplicationServices();
         
         services.AddTransient<AuthorizationFixMiddleware>();

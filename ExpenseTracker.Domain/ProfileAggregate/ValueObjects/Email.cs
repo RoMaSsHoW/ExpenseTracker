@@ -14,12 +14,15 @@ public class Email : ValueObject
             throw new ArgumentOutOfRangeException(nameof(address), "Invalid email address");
         
         Address = address.Trim().ToLower();
+        IsConfirmed = false;
     }
     
     public string Address { get; }
+    public bool IsConfirmed { get; }
     
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return Address;
+        yield return IsConfirmed;
     }
 }

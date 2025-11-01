@@ -32,21 +32,21 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 .HasColumnName("email_address")
                 .IsRequired();
 
+            email.Property(e => e.IsConfirmed)
+                .HasColumnName("email_is_confirmed")
+                .HasDefaultValue(false);
+            
             email.HasIndex(e => e.Address).IsUnique();
 
             email.WithOwner();
         });
-
-        builder.Property(u => u.EmailIsConfirmed)
-            .HasColumnName("email_is_confirmed")
-            .HasDefaultValue(false);
 
         builder.OwnsOne(u => u.Password, password =>
         {
             password.Property(p => p.PasswordHash)
                 .HasColumnName("password_hash")
                 .IsRequired();
-
+            
             password.WithOwner();
         });
         
