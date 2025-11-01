@@ -50,4 +50,47 @@ public class Account : Entity
             userId,
             isDefault);
     }
+    
+    public void ChangeName(string newName)
+    {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new ArgumentNullException(nameof(newName), "Account name cannot be null or empty.");
+
+        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(newName.Trim().ToLower());
+    }
+
+    public void ChangeCurrency(int currencyId)
+    {
+        Currency = Enumeration.FromId<Currency>(currencyId)
+                   ?? throw new ArgumentOutOfRangeException(nameof(currencyId), "Invalid currency ID.");
+    }
+
+    public void SetAsDefault()
+    {
+        IsDefault = true;
+    }
+    
+    public void UnsetAsDefault()
+    {
+        IsDefault = false;
+    }
+    
+    public void Deposit(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Deposit amount must be greater than zero.");
+
+        Balance += amount;
+    }
+    
+    public void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Withdrawal amount must be greater than zero.");
+
+        if (amount > Balance)
+            throw new InvalidOperationException("Insufficient funds for withdrawal.");
+
+        Balance -= amount;
+    }
 }

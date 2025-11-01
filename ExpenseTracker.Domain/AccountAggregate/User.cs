@@ -6,7 +6,7 @@ namespace ExpenseTracker.Domain.AccountAggregate;
 
 public class User : Entity
 {
-    private readonly List<Account>  _accounts;
+    private readonly List<Account> _accounts;
     
     public User() { }
     
@@ -26,6 +26,7 @@ public class User : Entity
         Role = Enumeration.FromId<Role>(roleId);
         RefreshToken = refreshToken;
         CreatedAt = DateTime.UtcNow;
+        _accounts = new List<Account>();
     }
     
     public string FirstName { get; private set; }
@@ -90,10 +91,10 @@ public class User : Entity
         if (string.IsNullOrWhiteSpace(oldPassword))
             throw new ArgumentException("Old password cannot be null or whitespace.", nameof(oldPassword));
 
-        if (Verify(oldPassword))
-        {
-            Password = new Password(newPassword);
-        }
+        if (!Verify(oldPassword))
+            throw new UnauthorizedAccessException("Old password is incorrect.");
+        
+        Password = new Password(newPassword);
     }
 
     public void AddAccount(
@@ -102,7 +103,23 @@ public class User : Entity
         int currencyId,
         bool isDefault)
     {
+        if (isDefault && _accounts.Any(a => a.IsDefault))
+            throw new InvalidOperationException("User already has a default account.");
+        
         var account = Account.Create(name, balance, currencyId, Id, isDefault);
         _accounts.Add(account);
+    }
+    
+    public void RemoveAccount(Guid accountId)
+    {
+        var account = _accounts.FirstOrDefault(a => a.Id == accountId);
+
+        if (account is null)
+            throw new KeyNotFoundException($"Account with ID '{accountId}' was not found.");
+
+        if (account.IsDefault)
+            throw new InvalidOperationException("Cannot delete the default account.");
+
+        _accounts.Remove(account);
     }
 }
