@@ -9,6 +9,8 @@ namespace ExpenseTracker.Application.Common.Persistence
     {
         public DbSet<User> Users { get; }
         public DbSet<Account> Accounts { get; }
+        public DbSet<Transaction> Transactions { get; }
+        public DbSet<Category> Categories { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;

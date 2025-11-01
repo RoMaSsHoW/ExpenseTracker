@@ -39,5 +39,10 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(a => a.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();
+        
+        builder.HasMany(a => a.Transactions)
+            .WithOne(t => t.Account)
+            .HasForeignKey(t => t.AccountId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

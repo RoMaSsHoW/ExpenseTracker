@@ -21,8 +21,8 @@ public class Transaction : Entity
         Name = name;
         Amount = amount;
         Currency = Enumeration.FromId<Currency>(currencyId);
-        TransactionType =  Enumeration.FromId<TransactionType>(transactionTypeId);
-        TransactionSource = Enumeration.FromId<TransactionSource>(transactionSourceId);
+        Type =  Enumeration.FromId<TransactionType>(transactionTypeId);
+        Source = Enumeration.FromId<TransactionSource>(transactionSourceId);
         AccountId = accountId;
         Date = date;
         Description = description;
@@ -35,18 +35,20 @@ public class Transaction : Entity
     public Currency Currency { get; private set; }
     public string? Description { get; private set; }
     public Guid? CategoryId { get; private set; }
-    public TransactionType TransactionType { get; private set; }
-    public TransactionSource TransactionSource { get; private set; }
+    public TransactionType Type { get; private set; }
+    public TransactionSource Source { get; private set; }
     public Guid AccountId { get; private set; }
     public DateTime Date { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public Category? Category { get; private set; }
-
-    public static Transaction CreateManual(
+    public Account Account { get; private set; }
+    
+    internal static Transaction Create(
         string name,
         decimal amount,
         int currencyId,
         int transactionTypeId,
+        int transactionSourceId,
         Guid accountId,
         DateTime date,
         string? description,
@@ -59,55 +61,7 @@ public class Transaction : Entity
             amount,
             currencyId,
             transactionTypeId,
-            TransactionSource.Manual.Id,
-            accountId,
-            date,
-            description,
-            categoryId);
-    }
-
-    public static Transaction CreateImported(
-        string name,
-        decimal amount,
-        int currencyId,
-        int transactionTypeId,
-        Guid accountId,
-        DateTime date,
-        string? description,
-        Guid? categoryId)
-    {
-        Validate(name, amount, accountId, date); 
-        
-        return new Transaction(
-            name,
-            amount,
-            currencyId,
-            transactionTypeId,
-            TransactionSource.Imported.Id,
-            accountId,
-            date,
-            description,
-            categoryId);
-    }
-    
-    public static Transaction CreateAuto(
-        string name,
-        decimal amount,
-        int currencyId,
-        int transactionTypeId,
-        Guid accountId,
-        DateTime date,
-        string? description,
-        Guid? categoryId)
-    {
-        Validate(name, amount, accountId, date); 
-        
-        return new Transaction(
-            name,
-            amount,
-            currencyId,
-            transactionTypeId,
-            TransactionSource.Auto.Id,
+            transactionSourceId,
             accountId,
             date,
             description,
@@ -132,5 +86,21 @@ public class Transaction : Entity
             throw new ArgumentOutOfRangeException(nameof(date), date, "Transaction date cannot be in the far future.");
     }
     
+    public void Rename(string newName)
+    {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new ArgumentException("New name cannot be null or empty.", nameof(newName));
+        
+        Name = newName;
+    }
     
+    public void ChangeCategory(Guid? newCategoryId)
+    {
+        CategoryId = newCategoryId;
+    }
+
+    public void UpdateDescription(string? description)
+    {
+        Description = description?.Trim();
+    }
 }
