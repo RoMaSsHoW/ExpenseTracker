@@ -1,4 +1,4 @@
-namespace ExpenseTracker.Application.Models.AccountDTOs;
+namespace ExpenseTracker.Application.Models.AuthDTOs;
 
 public class RegisterDto
 {

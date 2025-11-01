@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ExpenseTracker.Application.Models.AccountDTOs;
+namespace ExpenseTracker.Application.Models.AuthDTOs;
 
 public class LoginDto
 {
