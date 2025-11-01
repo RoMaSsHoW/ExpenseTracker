@@ -1,5 +1,5 @@
-﻿using ExpenseTracker.Domain.AccountAggregate;
-using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+﻿using ExpenseTracker.Domain.ProfileAggregate;
+using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
 
 namespace ExpenseTracker.Application.Common.Persistence
 {

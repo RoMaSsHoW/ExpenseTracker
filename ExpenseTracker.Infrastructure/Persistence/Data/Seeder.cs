@@ -1,7 +1,7 @@
 using ExpenseTracker.Application.Common.Persistence;
-using ExpenseTracker.Domain.AccountAggregate;
-using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.Common.ValueObjects;
+using ExpenseTracker.Domain.ProfileAggregate;
+using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Data;

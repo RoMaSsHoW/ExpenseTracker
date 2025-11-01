@@ -1,13 +1,13 @@
 ﻿using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Models;
-using ExpenseTracker.Domain.AccountAggregate;
-using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using ExpenseTracker.Domain.ProfileAggregate;
+using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Services
 {

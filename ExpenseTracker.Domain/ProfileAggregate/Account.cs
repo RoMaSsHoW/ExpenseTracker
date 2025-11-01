@@ -2,7 +2,7 @@ using System.Globalization;
 using ExpenseTracker.Domain.Common.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
 
-namespace ExpenseTracker.Domain.AccountAggregate;
+namespace ExpenseTracker.Domain.ProfileAggregate;
 
 public class Account : Entity
 {
