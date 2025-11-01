@@ -1,5 +1,5 @@
 using ExpenseTracker.Application.Common.Persistence;
-using ExpenseTracker.Domain.ProfileAggregate.Interfaces;
+using ExpenseTracker.Domain.UserAggregate.Interfaces;
 using ExpenseTracker.Infrastructure.Persistence.Data;
 using ExpenseTracker.Infrastructure.Persistence.Repositories;
 using ExpenseTracker.Infrastructure.Persistence.Services;

@@ -1,7 +1,7 @@
-using ExpenseTracker.Domain.Common.ValueObjects;
-using ExpenseTracker.Domain.ProfileAggregate;
+using ExpenseTracker.Domain.AccountAggregate;
+using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 
-namespace ExpenseTracker.Application.Models.ProfileDTOs;
+namespace ExpenseTracker.Application.Models.AccountDTOs;
 
 public class AccountGetDTO
 {

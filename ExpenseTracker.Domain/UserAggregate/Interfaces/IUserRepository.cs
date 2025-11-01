@@ -1,4 +1,4 @@
-namespace ExpenseTracker.Domain.ProfileAggregate.Interfaces;
+namespace ExpenseTracker.Domain.UserAggregate.Interfaces;
 
 public interface IUserRepository
 {

@@ -6,8 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using ExpenseTracker.Domain.ProfileAggregate;
-using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
+using ExpenseTracker.Domain.UserAggregate;
+using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Services
 {

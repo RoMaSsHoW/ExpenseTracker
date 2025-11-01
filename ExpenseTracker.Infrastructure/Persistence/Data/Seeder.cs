@@ -1,7 +1,8 @@
 using ExpenseTracker.Application.Common.Persistence;
-using ExpenseTracker.Domain.Common.ValueObjects;
-using ExpenseTracker.Domain.ProfileAggregate;
-using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
+using ExpenseTracker.Domain.AccountAggregate;
+using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+using ExpenseTracker.Domain.UserAggregate;
+using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Data;
@@ -40,13 +41,13 @@ public class Seeder
             return;
         
         var admin = await _dbContext.Users
-            .Include(u  => u.Accounts)
             .FirstOrDefaultAsync(u => u.Email.Address == "admin@gmail.com" &&
                                       u.Role == Role.Admin);
         if (admin is null)
             return;
-        
-        admin.AddAccount("Test", 100_000, Currency.UZB.Id, true);
+
+        var account = Account.Create("Test", 100_000, Currency.UZB.Id, admin.Id, true);
+        await _dbContext.Accounts.AddAsync(account);
         await _dbContext.SaveChangesAsync();
     }
 }

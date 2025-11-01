@@ -1,5 +1,5 @@
-using ExpenseTracker.Domain.Common.ValueObjects;
-using ExpenseTracker.Domain.ProfileAggregate;
+using ExpenseTracker.Domain.AccountAggregate;
+using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -39,10 +39,5 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(a => a.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();
-        
-        builder.HasOne(a => a.User)
-            .WithMany(u => u.Accounts)
-            .HasForeignKey(a => a.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }

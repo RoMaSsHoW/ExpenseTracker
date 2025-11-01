@@ -1,6 +1,6 @@
 using ExpenseTracker.Application.Common.Persistence;
-using ExpenseTracker.Domain.ProfileAggregate;
-using ExpenseTracker.Domain.ProfileAggregate.Interfaces;
+using ExpenseTracker.Domain.UserAggregate;
+using ExpenseTracker.Domain.UserAggregate.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Repositories;
@@ -42,7 +42,6 @@ public class UserRepository : IUserRepository
             throw new ArgumentNullException(nameof(userId), "UserId cannot be null or empty");
 
         var user = await _dbContext.Users
-            .Include(u => u.Accounts)
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         return user;

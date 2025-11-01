@@ -1,8 +1,7 @@
-using ExpenseTracker.Domain.Common.ValueObjects;
+using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
-using ExpenseTracker.Domain.TransactionAggregate.ValueObjects;
 
-namespace ExpenseTracker.Domain.TransactionAggregate;
+namespace ExpenseTracker.Domain.AccountAggregate;
 
 public class RecurringRule : Entity
 {

@@ -1,7 +1,7 @@
-using ExpenseTracker.Domain.ProfileAggregate;
-using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
+using ExpenseTracker.Domain.UserAggregate;
+using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 
-namespace ExpenseTracker.Application.Models.ProfileDTOs;
+namespace ExpenseTracker.Application.Models.UserDTOs;
 
 public class UserGetDTO
 {
@@ -12,7 +12,6 @@ public class UserGetDTO
         LastName = user.LastName;
         Email = user.Email;
         Role = user.Role;
-        Accounts = user.Accounts.Select(x => new AccountGetDTO(x)).ToList();
     }
     
     public Guid Id { get; init; }
@@ -20,5 +19,4 @@ public class UserGetDTO
     public string LastName { get; init; } 
     public Email Email { get; init; } 
     public Role Role { get; init; }
-    public List<AccountGetDTO> Accounts { get; init; }
 }

@@ -1,6 +1,6 @@
 using ExpenseTracker.Domain.SeedWork;
 
-namespace ExpenseTracker.Domain.Common.ValueObjects;
+namespace ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 
 public class Currency : Enumeration
 {

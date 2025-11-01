@@ -1,13 +1,12 @@
 using System.Globalization;
-using ExpenseTracker.Domain.ProfileAggregate.ValueObjects;
+using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.SeedWork;
+using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 
-namespace ExpenseTracker.Domain.ProfileAggregate;
+namespace ExpenseTracker.Domain.UserAggregate;
 
 public class User : Entity
 {
-    private readonly List<Account> _accounts;
-    
     public User() { }
     
     private User(
@@ -25,7 +24,6 @@ public class User : Entity
         Role = Enumeration.FromId<Role>(roleId);
         RefreshToken = refreshToken;
         CreatedAt = DateTime.UtcNow;
-        _accounts = new List<Account>();
     }
     
     public string FirstName { get; private set; }
@@ -35,7 +33,6 @@ public class User : Entity
     public Role Role { get; private set; }
     public RefreshToken RefreshToken { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public IReadOnlyCollection<Account> Accounts => _accounts.AsReadOnly();
     
     public static User Registration(
         string firstName,
@@ -69,7 +66,7 @@ public class User : Entity
         RefreshToken = refreshToken;
     }
 
-    public void ChangeProfile(
+    public void ChangeProfileInfo(
         string firstName,
         string lastName,
         string email)
@@ -93,31 +90,5 @@ public class User : Entity
             throw new UnauthorizedAccessException("Old password is incorrect.");
         
         Password = new Password(newPassword);
-    }
-
-    public void AddAccount(
-        string name,
-        decimal balance,
-        int currencyId,
-        bool isDefault)
-    {
-        if (isDefault && _accounts.Any(a => a.IsDefault))
-            throw new InvalidOperationException("User already has a default account.");
-        
-        var account = Account.Create(name, balance, currencyId, Id, isDefault);
-        _accounts.Add(account);
-    }
-    
-    public void RemoveAccount(Guid accountId)
-    {
-        var account = _accounts.FirstOrDefault(a => a.Id == accountId);
-
-        if (account is null)
-            throw new KeyNotFoundException($"Account with ID '{accountId}' was not found.");
-
-        if (account.IsDefault)
-            throw new InvalidOperationException("Cannot delete the default account.");
-
-        _accounts.Remove(account);
     }
 }

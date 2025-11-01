@@ -1,6 +1,6 @@
 ﻿using ExpenseTracker.Domain.SeedWork;
 
-namespace ExpenseTracker.Domain.ProfileAggregate.ValueObjects
+namespace ExpenseTracker.Domain.UserAggregate.ValueObjects
 {
     public class RefreshToken : ValueObject
     {

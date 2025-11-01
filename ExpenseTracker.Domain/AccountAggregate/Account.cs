@@ -1,8 +1,8 @@
 using System.Globalization;
-using ExpenseTracker.Domain.Common.ValueObjects;
+using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
 
-namespace ExpenseTracker.Domain.ProfileAggregate;
+namespace ExpenseTracker.Domain.AccountAggregate;
 
 public class Account : Entity
 {
@@ -29,9 +29,8 @@ public class Account : Entity
     public Guid UserId { get; private set; }
     public bool IsDefault { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public User User { get; private set; }
 
-    internal static Account Create(
+    public static Account Create(
         string name,
         decimal balance,
         int currencyId,
@@ -51,18 +50,12 @@ public class Account : Entity
             isDefault);
     }
     
-    public void ChangeName(string newName)
+    public void Rename(string newName)
     {
         if (string.IsNullOrWhiteSpace(newName))
             throw new ArgumentNullException(nameof(newName), "Account name cannot be null or empty.");
 
         Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(newName.Trim().ToLower());
-    }
-
-    public void ChangeCurrency(int currencyId)
-    {
-        Currency = Enumeration.FromId<Currency>(currencyId)
-                   ?? throw new ArgumentOutOfRangeException(nameof(currencyId), "Invalid currency ID.");
     }
 
     public void SetAsDefault()

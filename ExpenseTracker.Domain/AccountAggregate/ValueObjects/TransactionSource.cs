@@ -1,6 +1,6 @@
 using ExpenseTracker.Domain.SeedWork;
 
-namespace ExpenseTracker.Domain.TransactionAggregate.ValueObjects;
+namespace ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 
 public class TransactionSource : Enumeration
 {

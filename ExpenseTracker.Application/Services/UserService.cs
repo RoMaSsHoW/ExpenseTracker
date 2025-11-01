@@ -1,22 +1,23 @@
-using ExpenseTracker.Application.Common.Messaging;
 using ExpenseTracker.Application.Common.Persistence;
-using ExpenseTracker.Application.Models.ProfileDTOs;
-using ExpenseTracker.Domain.ProfileAggregate.Interfaces;
+using ExpenseTracker.Application.Models.UserDTOs;
+using ExpenseTracker.Domain.UserAggregate.Interfaces;
 
-namespace ExpenseTracker.Application.Commands.ProfileCommands;
+namespace ExpenseTracker.Application.Services;
 
-public class PullProfileCommandHandler : ICommandHandler<PullProfileCommand, UserGetDTO>
+public class UserService : IUserService
 {
     private readonly IHttpAccessor _accessor;
     private readonly IUserRepository _userRepository;
 
-    public PullProfileCommandHandler(IHttpAccessor accessor, IUserRepository userRepository)
+    public UserService(
+        IHttpAccessor accessor,
+        IUserRepository userRepository)
     {
         _accessor = accessor;
         _userRepository = userRepository;
     }
 
-    public async Task<UserGetDTO> Handle(PullProfileCommand request, CancellationToken cancellationToken)
+    public async Task<UserGetDTO> GetUserAsync()
     {
         var userId = _accessor.GetUserId();
         if (userId == Guid.Empty)

@@ -1,8 +1,8 @@
 using ExpenseTracker.Application.Common.Messaging;
 using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Models;
-using ExpenseTracker.Domain.ProfileAggregate;
-using ExpenseTracker.Domain.ProfileAggregate.Interfaces;
+using ExpenseTracker.Domain.UserAggregate;
+using ExpenseTracker.Domain.UserAggregate.Interfaces;
 
 namespace ExpenseTracker.Application.Commands.AuthCommands;
 

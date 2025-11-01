@@ -1,4 +1,5 @@
-﻿using ExpenseTracker.Domain.ProfileAggregate;
+﻿using ExpenseTracker.Domain.AccountAggregate;
+using ExpenseTracker.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
