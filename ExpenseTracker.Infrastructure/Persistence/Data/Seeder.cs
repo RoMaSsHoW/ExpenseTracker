@@ -1,6 +1,7 @@
 using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+using ExpenseTracker.Domain.Common.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Persistence.Data;
@@ -19,6 +20,7 @@ public class Seeder
     public async Task RunAsync()
     {
         await SeedUsers();
+        await SeedAccounts();
     }
 
     private async Task SeedUsers()
@@ -29,6 +31,22 @@ public class Seeder
         var admin = User.Registration("admin", "admin", "admin@gmail.com", "admin123", Role.Admin.Id, _tokenService.GenerateRefreshToken());
         
         await _dbContext.Users.AddAsync(admin);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task SeedAccounts()
+    {
+        if (await _dbContext.Accounts.AnyAsync())
+            return;
+        
+        var admin = await _dbContext.Users
+            .Include(u  => u.Accounts)
+            .FirstOrDefaultAsync(u => u.Email.Address == "admin@gmail.com" &&
+                                      u.Role == Role.Admin);
+        if (admin is null)
+            return;
+        
+        admin.AddAccount("Test", 100_000, Currency.UZB.Id, true);
         await _dbContext.SaveChangesAsync();
     }
 }

@@ -6,6 +6,8 @@ namespace ExpenseTracker.Domain.AccountAggregate;
 
 public class User : Entity
 {
+    private readonly List<Account>  _accounts;
+    
     public User() { }
     
     private User(
@@ -34,7 +36,8 @@ public class User : Entity
     public Role Role { get; private set; }
     public RefreshToken RefreshToken { get; private set; }
     public DateTime CreatedAt { get; private set; }
-
+    public IReadOnlyCollection<Account> Accounts => _accounts.AsReadOnly();
+    
     public static User Registration(
         string firstName,
         string lastName,
@@ -91,5 +94,15 @@ public class User : Entity
         {
             Password = new Password(newPassword);
         }
+    }
+
+    public void AddAccount(
+        string name,
+        decimal balance,
+        int currencyId,
+        bool isDefault)
+    {
+        var account = Account.Create(name, balance, currencyId, Id, isDefault);
+        _accounts.Add(account);
     }
 }
