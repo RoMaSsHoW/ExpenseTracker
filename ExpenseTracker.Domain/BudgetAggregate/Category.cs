@@ -2,12 +2,10 @@ using System.Globalization;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
 
-namespace ExpenseTracker.Domain.AccountAggregate;
+namespace ExpenseTracker.Domain.BudgetAggregate;
 
 public class Category : Entity
 {
-    private readonly List<Transaction> _transactions;
-    
     public Category() { }
     
     private Category(
@@ -28,7 +26,6 @@ public class Category : Entity
     public Guid? UserId { get; private set; } 
     public DateTime CreatedAt { get; private set; }
     public bool IsDefault { get; private set; }
-    public IReadOnlyCollection<Transaction> Transactions => _transactions.AsReadOnly();
     
     public static Category Create(
         string name,

@@ -1,5 +1,6 @@
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+using ExpenseTracker.Domain.BudgetAggregate;
 using ExpenseTracker.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -34,9 +35,5 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
         builder.Property(c => c.IsDefault)
             .HasColumnName("is_default")
             .IsRequired();
-
-        builder.HasMany(c => c.Transactions)
-            .WithOne(t => t.Category)
-            .HasForeignKey(t => t.CategoryId);
     }
 }

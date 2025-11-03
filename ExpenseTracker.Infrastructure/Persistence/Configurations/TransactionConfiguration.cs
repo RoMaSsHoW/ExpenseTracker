@@ -55,9 +55,6 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
             .HasColumnName("created_at")
             .IsRequired();
 
-        builder.HasOne(t => t.Category)
-            .WithMany(c => c.Transactions)
-            .HasForeignKey(t => t.CategoryId);
         builder.HasOne(t => t.Account)
             .WithMany(a => a.Transactions)
             .HasForeignKey(t => t.AccountId)

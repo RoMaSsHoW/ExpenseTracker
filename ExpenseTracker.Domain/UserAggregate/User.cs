@@ -1,5 +1,4 @@
 using System.Globalization;
-using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.SeedWork;
 using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 

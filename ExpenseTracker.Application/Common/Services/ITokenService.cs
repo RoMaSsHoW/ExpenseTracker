@@ -1,14 +1,13 @@
 ﻿using ExpenseTracker.Domain.UserAggregate;
 using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 
-namespace ExpenseTracker.Application.Common.Services
+namespace ExpenseTracker.Application.Common.Services;
+
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        string GenerateAccessToken(User user);
+    string GenerateAccessToken(User user);
 
-        RefreshToken GenerateRefreshToken();
+    RefreshToken GenerateRefreshToken();
 
-        bool IsRefreshTokenExpired(User user);
-    }
+    bool IsRefreshTokenExpired(User user);
 }

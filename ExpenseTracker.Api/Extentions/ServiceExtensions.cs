@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.Json;
 using ExpenseTracker.Api.Common.Services;
 using ExpenseTracker.Application;
-using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Common.Services;
 
 namespace ExpenseTracker.Api.Extentions;
@@ -18,9 +17,9 @@ public static class ServiceExtensions
     {
         services.AddInfrastructureServices(configuration);
 
-        ConfigureJwtAuthenticationAndAuthorization(services, configuration);
+        // ConfigureJwtAuthenticationAndAuthorization(services, configuration);
 
-        services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
+        // services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
 
         services.AddHttpContextAccessor();
 

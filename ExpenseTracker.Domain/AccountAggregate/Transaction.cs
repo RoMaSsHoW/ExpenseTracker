@@ -40,7 +40,6 @@ public class Transaction : Entity
     public Guid AccountId { get; private set; }
     public DateTime Date { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public Category? Category { get; private set; }
     public Account Account { get; private set; }
     
     internal static Transaction Create(
