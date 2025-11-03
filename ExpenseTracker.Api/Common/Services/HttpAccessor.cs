@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using ExpenseTracker.Application.Common.Persistence;
+using ExpenseTracker.Application.Common.Services;
 
-namespace ExpenseTracker.Api.Common.Persistence;
+namespace ExpenseTracker.Api.Common.Services;
 
 public class HttpAccessor : IHttpAccessor
 {

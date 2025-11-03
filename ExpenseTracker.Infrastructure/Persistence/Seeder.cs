@@ -1,11 +1,12 @@
 using ExpenseTracker.Application.Common.Persistence;
+using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.UserAggregate;
 using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
-namespace ExpenseTracker.Infrastructure.Persistence.Data;
+namespace ExpenseTracker.Infrastructure.Persistence;
 
 public class Seeder
 {
@@ -29,7 +30,13 @@ public class Seeder
         if (await _dbContext.Users.AnyAsync()) 
             return;
 
-        var admin = User.Registration("admin", "admin", "admin@gmail.com", "admin123", Role.Admin.Id, _tokenService.GenerateRefreshToken());
+        var admin = User.Registration(
+            "admin", 
+            "admin",
+            "admin@gmail.com",
+            "admin123",
+            Role.Admin.Id,
+            _tokenService.GenerateRefreshToken());
         
         await _dbContext.Users.AddAsync(admin);
         await _dbContext.SaveChangesAsync();
@@ -47,6 +54,17 @@ public class Seeder
             return;
 
         var account = Account.Create("Test", 100_000, Currency.UZB.Id, admin.Id, true);
+        
+        account.AddTransaction(
+            "Initial balance",
+            23_000,
+            Currency.UZB.Id,
+            TransactionType.Expense.Id,
+            TransactionSource.Manual.Id,
+            DateTime.UtcNow.AddHours(-4),
+            "Seed transaction for testing",
+            null);
+        
         await _dbContext.Accounts.AddAsync(account);
         await _dbContext.SaveChangesAsync();
     }

@@ -1,6 +1,6 @@
+using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.UserDTOs;
-using ExpenseTracker.Application.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

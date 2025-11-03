@@ -1,8 +1,7 @@
-using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Models.UserDTOs;
 using ExpenseTracker.Domain.UserAggregate.Interfaces;
 
-namespace ExpenseTracker.Application.Services;
+namespace ExpenseTracker.Application.Common.Services;
 
 public class UserService : IUserService
 {

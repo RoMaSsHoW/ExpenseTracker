@@ -4,7 +4,7 @@ using ExpenseTracker.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ExpenseTracker.Infrastructure.Persistence.Data.Configurations;
+namespace ExpenseTracker.Infrastructure.Persistence.Configurations;
 
 public class AccountConfiguration : IEntityTypeConfiguration<Account>
 {

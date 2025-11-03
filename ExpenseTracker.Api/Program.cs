@@ -2,6 +2,7 @@ using AspNetCore.Swagger.Themes;
 using ExpenseTracker.Api.Extentions;
 using ExpenseTracker.Api.Middlewares;
 using ExpenseTracker.Application.Common.Persistence;
+using ExpenseTracker.Infrastructure.Persistence;
 using ExpenseTracker.Infrastructure.Persistence.Data;
 using Microsoft.OpenApi.Models;
 

@@ -4,7 +4,7 @@ using ExpenseTracker.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace ExpenseTracker.Infrastructure.Persistence.Data;
+namespace ExpenseTracker.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext, IAppDbContext
 {

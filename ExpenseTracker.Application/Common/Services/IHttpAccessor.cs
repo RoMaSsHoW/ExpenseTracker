@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace ExpenseTracker.Application.Common.Persistence;
+namespace ExpenseTracker.Application.Common.Services;
 
 public interface IHttpAccessor
 {

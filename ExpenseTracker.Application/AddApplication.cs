@@ -1,5 +1,5 @@
 ﻿using ExpenseTracker.Application.Commands.AuthCommands;
-using ExpenseTracker.Application.Services;
+using ExpenseTracker.Application.Common.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpenseTracker.Application;

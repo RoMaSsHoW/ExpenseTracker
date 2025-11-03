@@ -1,6 +1,6 @@
 using ExpenseTracker.Application.Common.Persistence;
 
-namespace ExpenseTracker.Infrastructure.Persistence.Services;
+namespace ExpenseTracker.Infrastructure.Persistence;
 
 public class UnitOfWork : IUnitOfWork
 {

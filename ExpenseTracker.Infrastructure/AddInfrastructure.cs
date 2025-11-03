@@ -1,8 +1,10 @@
 using ExpenseTracker.Application.Common.Persistence;
+using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Domain.UserAggregate.Interfaces;
+using ExpenseTracker.Infrastructure.Persistence;
 using ExpenseTracker.Infrastructure.Persistence.Data;
 using ExpenseTracker.Infrastructure.Persistence.Repositories;
-using ExpenseTracker.Infrastructure.Persistence.Services;
+using ExpenseTracker.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

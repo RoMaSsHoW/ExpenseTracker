@@ -1,6 +1,6 @@
 using ExpenseTracker.Application.Models.UserDTOs;
 
-namespace ExpenseTracker.Application.Services;
+namespace ExpenseTracker.Application.Common.Services;
 
 public interface IUserService
 {

@@ -1,5 +1,6 @@
 using ExpenseTracker.Application.Common.Messaging;
 using ExpenseTracker.Application.Common.Persistence;
+using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Domain.UserAggregate.Interfaces;
 
