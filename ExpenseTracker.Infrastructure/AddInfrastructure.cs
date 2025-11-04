@@ -30,8 +30,6 @@ public static class AddInfrastructure
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<ITokenService, TokenService>();
 
-        services.AddScoped<AutoTransactionJob>();
-        
         services.AddQuartz(q =>
         {
             var jobKey = new JobKey("AutoTransactionJob");
@@ -42,8 +40,7 @@ public static class AddInfrastructure
                 .ForJob(jobKey)
                 .WithIdentity("AutoTransactionJob-trigger")
                 // Каждый день в 01:00 ночи по UTC
-                // .WithCronSchedule("0 0 1 * * ?") // секунда=0, минута=0, час=1, каждый день
-                .WithCronSchedule("0 0 11 * * ?") // сек=0, мин=30, час=10, каждый день
+                .WithCronSchedule("0 0 1 * * ?") // секунда=0, минута=0, час=1, каждый день
                 .WithDescription("Run AutoTransactionJob daily at 01:00 UTC"));
         });
         
