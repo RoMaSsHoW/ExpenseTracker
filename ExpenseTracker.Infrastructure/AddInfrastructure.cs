@@ -40,7 +40,8 @@ public static class AddInfrastructure
                 .ForJob(jobKey)
                 .WithIdentity("AutoTransactionJob-trigger")
                 // Каждый день в 01:00 ночи по UTC
-                .WithCronSchedule("0 0 1 * * ?") // секунда=0, минута=0, час=1, каждый день
+                // .WithCronSchedule("0 0 1 * * ?") // секунда=0, минута=0, час=1, каждый день
+                .WithCronSchedule("0 30 10 * * ?") // сек=0, мин=30, час=10, каждый день
                 .WithDescription("Run AutoTransactionJob daily at 01:00 UTC"));
         });
         
