@@ -23,6 +23,7 @@ public class Seeder
     {
         await SeedUsers();
         await SeedAccounts();
+        await SeedRecurringRule();
     }
 
     private async Task SeedUsers()
@@ -53,19 +54,50 @@ public class Seeder
         if (admin is null)
             return;
 
-        var account = Account.Create("Test", 100_000, Currency.UZB.Id, admin.Id, true);
+        var account = Account.Create("Test", 100_000m, Currency.UZB.Id, admin.Id, true);
         
         account.AddTransaction(
             "Initial balance",
-            23_000,
+            23_000m,
             Currency.UZB.Id,
             TransactionType.Expense.Id,
             TransactionSource.Manual.Id,
             DateTime.UtcNow.AddHours(-4),
             "Seed transaction for testing",
             null);
-        
+            
         await _dbContext.Accounts.AddAsync(account);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task SeedRecurringRule()
+    {
+        if (await _dbContext.RecurringRules.AnyAsync())
+            return;
+        
+        var admin = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email.Address == "admin@gmail.com" &&
+                                      u.Role == Role.Admin);
+        
+        if (admin is null)
+            return;
+        
+        var account = await _dbContext.Accounts
+            .FirstOrDefaultAsync(a => a.Name == "Test" && a.UserId == admin.Id);
+        
+        if (account is null)
+            return;
+        
+        account.AddRecurringRule(
+            name: "Daily test expense",
+            amount: 5_000m,
+            currencyId: Currency.UZB.Id,
+            categoryId: null,
+            transactionTypeId: TransactionType.Expense.Id,
+            recurringFrequencyId: RecurringFrequency.Daily.Id, // предположим, что есть перечисление
+            startDate: DateTime.UtcNow // сегодня
+        );
+        
         await _dbContext.SaveChangesAsync();
     }
 }
