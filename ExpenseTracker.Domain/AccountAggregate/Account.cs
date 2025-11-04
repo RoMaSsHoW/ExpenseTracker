@@ -17,7 +17,7 @@ public class Account : Entity
         Guid userId,
         bool isDefault)
     {
-        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
+        Name = FormatName(name);
         Balance = balance;
         Currency = Enumeration.FromId<Currency>(currencyId);
         UserId = userId;
@@ -59,18 +59,13 @@ public class Account : Entity
         if (string.IsNullOrWhiteSpace(newName))
             throw new ArgumentNullException(nameof(newName), "Account name cannot be null or empty.");
 
-        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(newName.Trim().ToLower());
+        Name = FormatName(newName);
     }
 
-    public void SetAsDefault()
-    {
-        IsDefault = true;
-    }
+    public void SetAsDefault() => IsDefault = true;
     
-    public void UnsetAsDefault()
-    {
-        IsDefault = false;
-    }
+    public void UnsetAsDefault() => IsDefault = false;
+    
     
     internal void Deposit(decimal amount)
     {
@@ -101,8 +96,8 @@ public class Account : Entity
         string? description,
         Guid? categoryId)
     {
-        if (Currency != Enumeration.FromId<Currency>(currencyId))
-            throw new InvalidOperationException("Transaction currency must match account currency.");
+        var transactionCurrency = GetCurrency(currencyId);
+        EnsureCurrencyMatch(transactionCurrency);
         
         var transaction = Transaction.Create(
             name, 
@@ -125,9 +120,8 @@ public class Account : Entity
 
     public void RemoveTransaction(Guid transactionId)
     {
-        var transaction = _transactions.FirstOrDefault(t => t.Id == transactionId);
-        if (transaction == null)
-            throw new InvalidOperationException($"Transaction with ID '{transactionId}' not found.");
+        var transaction = _transactions.FirstOrDefault(t => t.Id == transactionId)
+            ?? throw new InvalidOperationException($"Transaction with ID '{transactionId}' not found.");
         
         if (transaction.Type == TransactionType.Expense)
             Deposit(transaction.Amount);
@@ -146,8 +140,8 @@ public class Account : Entity
         int recurringFrequencyId,
         DateTime startDate)
     {
-        if (Currency != Enumeration.FromId<Currency>(currencyId))
-            throw new InvalidOperationException("Transaction currency must match account currency.");
+        var ruleCurrency = GetCurrency(currencyId);
+        EnsureCurrencyMatch(ruleCurrency);
 
         var recyrringRule = RecurringRule.Create(
             name,
@@ -164,9 +158,21 @@ public class Account : Entity
 
     public void RemoveRecurringRule(Guid ruleId)
     {
-        var rule = _recurringRules.FirstOrDefault(r => r.Id == ruleId);
-        if (rule == null)
-            throw new InvalidOperationException($"Rule with ID '{ruleId}' not found.");
+        var rule = _recurringRules.FirstOrDefault(r => r.Id == ruleId)
+            ?? throw new InvalidOperationException($"Rule with ID '{ruleId}' not found.");
+        
         _recurringRules.Remove(rule);
+    }
+    
+    private static string FormatName(string name) =>
+        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
+    
+    private static Currency GetCurrency(int currencyId) =>
+        Enumeration.FromId<Currency>(currencyId);
+
+    private void EnsureCurrencyMatch(Currency currency)
+    {
+        if (Currency != currency)
+            throw new InvalidOperationException("Transaction currency must match account currency.");
     }
 }

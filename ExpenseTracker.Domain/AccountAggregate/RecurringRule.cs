@@ -23,9 +23,7 @@ public class RecurringRule : Entity
         CategoryId = categoryId;
         Type = Enumeration.FromId<TransactionType>(transactionTypeId);
         Frequency = Enumeration.FromId<RecurringFrequency>(recurringFrequencyId);
-        NextRunAt = startDate;
-        if (NextRunAt < DateTime.UtcNow)
-            UpdateNextRun();
+        NextRunAt = startDate < DateTime.UtcNow ? CalculateNextRun(startDate) : startDate;
         AccountId = accountId;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;
@@ -69,29 +67,10 @@ public class RecurringRule : Entity
             accountId);
     }
 
-    public void Deactivate()
-    {
-        if (IsActive)
-            IsActive = false;
-    }
+    public void Deactivate() => IsActive = false;
 
-    public void Activate()
-    {
-        if (!IsActive)
-            IsActive = true;
-    }
-
-    private void UpdateNextRun()
-    {
-        NextRunAt = Frequency switch
-        {
-            var t when Equals(t, RecurringFrequency.Daily) => NextRunAt.AddDays(1),
-            var t when Equals(t, RecurringFrequency.Weekly) => NextRunAt.AddDays(7),
-            var t when Equals(t, RecurringFrequency.Monthly) => NextRunAt.AddMonths(1),
-            _ => throw new ArgumentException("Unsupported recurring frequency")
-        };
-    }
-
+    public void Activate() => IsActive = true;
+    
     public void CreateAutoTransaction()
     {
         if (!IsActive)
@@ -106,7 +85,16 @@ public class RecurringRule : Entity
             NextRunAt,
             null,
             CategoryId);
-        
-        UpdateNextRun();
+
+        NextRunAt = CalculateNextRun(NextRunAt);
     }
+    
+    private DateTime CalculateNextRun(DateTime fromDate) =>
+        Frequency switch
+        {
+            var t when Equals(t, RecurringFrequency.Daily) => fromDate.AddDays(1),
+            var t when Equals(t, RecurringFrequency.Weekly) => fromDate.AddDays(7),
+            var t when Equals(t, RecurringFrequency.Monthly) => fromDate.AddMonths(1),
+            _ => throw new ArgumentException("Unsupported recurring frequency")
+        };
 }
