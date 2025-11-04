@@ -31,7 +31,7 @@ public class Seeder
         if (await _dbContext.Users.AnyAsync()) 
             return;
 
-        var admin = User.Registration(
+        var admin = User.Register(
             "admin", 
             "admin",
             "admin@gmail.com",

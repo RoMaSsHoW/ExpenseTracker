@@ -33,7 +33,7 @@ public class User : Entity
     public RefreshToken RefreshToken { get; private set; }
     public DateTime CreatedAt { get; private set; }
     
-    public static User Registration(
+    public static User Register(
         string firstName,
         string lastName,
         string email,

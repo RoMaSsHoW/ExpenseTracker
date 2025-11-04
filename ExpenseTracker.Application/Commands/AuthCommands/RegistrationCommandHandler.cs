@@ -28,7 +28,7 @@ public class RegistrationCommandHandler : ICommandHandler<RegistrationCommand, A
     {
         var refreshToken = _tokenService.GenerateRefreshToken();
 
-        var user = User.Registration(
+        var user = User.Register(
             request.Register.FirstName,
             request.Register.LastName,
             request.Register.Email,
