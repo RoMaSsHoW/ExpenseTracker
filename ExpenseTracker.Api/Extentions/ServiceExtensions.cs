@@ -13,19 +13,19 @@ namespace ExpenseTracker.Api.Extentions;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddApiServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddInfrastructureServices(configuration);
 
         ConfigureJwtAuthenticationAndAuthorization(services, configuration);
-
         services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
 
         services.AddHttpContextAccessor();
-
         services.AddScoped<IHttpAccessor, HttpAccessor>();
         
-        services.AddApplicationServices();
+        services.AddApplicationServices(configuration);
         
         services.AddTransient<AuthorizationFixMiddleware>();
 

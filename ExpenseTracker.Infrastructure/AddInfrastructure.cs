@@ -24,12 +24,19 @@ public static class AddInfrastructure
             options.UseNpgsql(configuration.GetConnectionString("PostgresqlDbConnection"));
         });
 
-        services.AddScoped<Seeder>();
         services.AddScoped<IUserRepository, UserRepository>();
-        
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<Seeder>();
+        
         services.AddTransient<ITokenService, TokenService>();
 
+        ConfigureQuartz(services);
+        
+        return services;
+    }
+
+    private static void ConfigureQuartz(IServiceCollection services)
+    {
         services.AddQuartz(q =>
         {
             var jobKey = new JobKey("AutoTransactionJob");
@@ -39,8 +46,7 @@ public static class AddInfrastructure
             q.AddTrigger(opts => opts
                 .ForJob(jobKey)
                 .WithIdentity("AutoTransactionJob-trigger")
-                // Каждый день в 01:00 ночи по UTC
-                .WithCronSchedule("0 0 1 * * ?") // секунда=0, минута=0, час=1, каждый день
+                .WithCronSchedule("0 0 1 * * ?") // Каждый день в 01:00 ночи по UTC (секунда=0, минута=0, час=1)
                 .WithDescription("Run AutoTransactionJob daily at 01:00 UTC"));
         });
         
@@ -48,8 +54,6 @@ public static class AddInfrastructure
         {
             opt.WaitForJobsToComplete = true;
         });
-        
-        return services;
     }
 }
 
