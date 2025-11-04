@@ -5,50 +5,61 @@ namespace ExpenseTracker.Domain.AccountAggregate;
 
 public class RecurringRule : Entity
 {
-    protected RecurringRule(
-        string title,
+    public RecurringRule() { }
+    
+    private RecurringRule(
+        string name,
         decimal amount,
         int currencyId,
-        Guid categoryId,
+        Guid? categoryId,
         int transactionTypeId,
         int recurringFrequencyId,
         DateTime startDate,
         Guid accountId)
     {
-        Title = title;
+        Name = name;
         Amount = amount;
         Currency = Enumeration.FromId<Currency>(currencyId);
         CategoryId = categoryId;
         Type = Enumeration.FromId<TransactionType>(transactionTypeId);
         Frequency = Enumeration.FromId<RecurringFrequency>(recurringFrequencyId);
         NextRunAt = startDate;
+        if (NextRunAt < DateTime.UtcNow)
+            UpdateNextRun();
         AccountId = accountId;
         IsActive = true;
+        CreatedAt = DateTime.UtcNow;
     }
     
-    public string Title { get; private set; }
+    public string Name { get; private set; }
     public decimal Amount { get; private set; }
     public Currency Currency { get; private set; }
-    public Guid CategoryId { get; private set; }
+    public Guid? CategoryId { get; private set; }
     public TransactionType Type { get; private set; }
     public RecurringFrequency Frequency { get; private set; }
     public DateTime NextRunAt { get; private set; }
     public bool IsActive { get; private set; }
+    public DateTime CreatedAt { get; private set; }
     public Guid AccountId { get; private set; }
+    public Account Account { get; private set; }
 
     public static RecurringRule Create(
-        string title,
+        string name,
         decimal amount,
         int currencyId,
-        Guid categoryId,
+        Guid? categoryId,
         int transactionTypeId,
         int recurringFrequencyId,
         DateTime startDate,
         Guid accountId)
     {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentNullException(nameof(name), "Recurring rule name cannot be null or empty.");
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), "Recurring rule amount cannot be zero or negative.");
         
         return new RecurringRule(
-            title, 
+            name, 
             amount,
             currencyId,
             categoryId,
@@ -70,7 +81,7 @@ public class RecurringRule : Entity
             IsActive = true;
     }
 
-    public void UpdateNextRun()
+    private void UpdateNextRun()
     {
         NextRunAt = Frequency switch
         {
@@ -79,5 +90,23 @@ public class RecurringRule : Entity
             var t when Equals(t, RecurringFrequency.Monthly) => NextRunAt.AddMonths(1),
             _ => throw new ArgumentException("Unsupported recurring frequency")
         };
+    }
+
+    public void CreateAutoTransaction()
+    {
+        if (!IsActive)
+            throw new InvalidOperationException("Cannot create auto transaction for inactive recurring rule.");
+        
+        Account.AddTransaction(
+            Name, 
+            Amount, 
+            Currency.Id,
+            Type.Id,
+            TransactionSource.Auto.Id, 
+            NextRunAt,
+            null,
+            CategoryId);
+        
+        UpdateNextRun();
     }
 }

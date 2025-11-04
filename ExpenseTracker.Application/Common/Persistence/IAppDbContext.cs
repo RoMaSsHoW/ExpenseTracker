@@ -12,6 +12,7 @@ public interface IAppDbContext
     public DbSet<Account> Accounts { get; }
     public DbSet<Transaction> Transactions { get; }
     public DbSet<Category> Categories { get; }
+    public DbSet<RecurringRule>  RecurringRules { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;

@@ -44,5 +44,10 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
             .WithOne(t => t.Account)
             .HasForeignKey(t => t.AccountId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.HasMany(a => a.RecurringRules)
+            .WithOne(r => r.Account)
+            .HasForeignKey(r => r.AccountId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
