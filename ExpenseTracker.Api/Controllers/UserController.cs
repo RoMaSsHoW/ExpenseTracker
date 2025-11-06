@@ -1,6 +1,6 @@
-using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.UserDTOs;
+using ExpenseTracker.Application.Queries.UserQueries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +10,9 @@ namespace ExpenseTracker.Api.Controllers;
 [Authorize]
 public class UserController : BaseApiController
 {
-    private readonly IUserService _userService;
-
-    public UserController(
-        IMediator mediator,
-        IUserService userService) : base(mediator)
-    {
-        _userService = userService;
-    }
+    public UserController(IMediator mediator) 
+        : base(mediator)
+    { }
 
     [HttpGet("get-user")]
     
@@ -25,9 +20,8 @@ public class UserController : BaseApiController
     {
         try
         {
-            // var command = new PullProfileCommand();
-            // var result = await Mediator.Send(command);
-            var result = await _userService.GetUserAsync();
+            var command = new GetUserQuery();
+            var result = await Mediator.Send(command);
             var response = Response<UserGetDTO>.Success(result);
             return StatusCode(response.StatusCode, response);
         }

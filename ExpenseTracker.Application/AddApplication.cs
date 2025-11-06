@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using ExpenseTracker.Application.Commands.AuthCommands;
-using ExpenseTracker.Application.Common.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
@@ -13,8 +12,6 @@ public static class AddApplication
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<IUserService, UserService>();
-        
         ConfigureDapper(services, configuration);
         
         ConfigureMediatR(services);
