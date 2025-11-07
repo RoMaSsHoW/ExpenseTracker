@@ -30,7 +30,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
             .HasColumnName("currency")
             .IsRequired();
         builder.Property(a => a.UserId)
-            .HasColumnName("user_Id")
+            .HasColumnName("user_id")
             .IsRequired();
         builder.Property(a => a.IsDefault)
             .HasColumnName("is_default")

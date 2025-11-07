@@ -20,9 +20,9 @@ public class UserController : BaseApiController
     {
         try
         {
-            var command = new GetUserQuery();
-            var result = await Mediator.Send(command);
-            var response = Response<UserGetDTO>.Success(result);
+            var query = new GetUserQuery();
+            var result = await Mediator.Send(query);
+            var response = Response<UserViewDTO>.Success(result);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)

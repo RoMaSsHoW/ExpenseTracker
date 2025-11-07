@@ -6,7 +6,7 @@ using ExpenseTracker.Application.Models.UserDTOs;
 
 namespace ExpenseTracker.Application.Queries.UserQueries;
 
-public class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserGetDTO>
+public class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserViewDTO>
 {
     private readonly IDbConnection _dbConnection;
     private readonly IHttpAccessor _accessor;
@@ -17,7 +17,7 @@ public class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserGetDTO>
         _accessor = accessor;
     }
 
-    public async Task<UserGetDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    public async Task<UserViewDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         var userId = _accessor.GetUserId();
         if (userId == Guid.Empty)
@@ -25,14 +25,14 @@ public class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserGetDTO>
 
         var sql = @"
             SELECT 
-                id as Id,
-                first_name as FirstName,
-                last_name as LastName,
-                email_address as EmailAddress,
-                email_is_confirmed as EmailIsConfirmed,
-                role as RoleName
+                id AS Id,
+                first_name AS FirstName,
+                last_name AS LastName,
+                email_address AS EmailAddress,
+                email_is_confirmed AS EmailIsConfirmed,
+                role AS RoleName
             FROM users 
-            WHERE Id = @Id";
+            WHERE id = @Id";
                   
         var parameters = new DynamicParameters();
         parameters.Add("@Id", userId, DbType.Guid);
@@ -41,6 +41,6 @@ public class GetUserQueryHandler : IQueryHandler<GetUserQuery, UserGetDTO>
         if (result is null)
             throw new KeyNotFoundException("User not found.");
 
-        return result;
+        return new UserViewDTO(result);
     }
 }

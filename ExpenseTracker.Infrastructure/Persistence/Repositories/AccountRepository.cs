@@ -32,4 +32,13 @@ public class AccountRepository : IAccountRepository
     {
         await _dbContext.Accounts.AddAsync(account);
     }
+
+    public void Remove(Guid accountId)
+    {
+        var account = _dbContext.Accounts.Find(accountId);
+        if (account is null) 
+            throw new KeyNotFoundException($"Account with ID '{accountId}' was not found.");
+        
+        _dbContext.Accounts.Remove(account);
+    }
 }

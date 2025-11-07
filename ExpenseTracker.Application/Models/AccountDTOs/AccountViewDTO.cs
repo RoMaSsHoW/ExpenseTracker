@@ -1,5 +1,6 @@
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+using ExpenseTracker.Domain.SeedWork;
 
 namespace ExpenseTracker.Application.Models.AccountDTOs;
 
@@ -11,6 +12,15 @@ public class AccountViewDTO
         Name = account.Name;
         Balance = account.Balance;
         Currency = account.Currency;
+        IsDefault = account.IsDefault;
+    }
+
+    public AccountViewDTO(AccountGetDTO account)
+    {
+        Id = account.Id;
+        Name = account.Name;
+        Balance = account.Balance;
+        Currency = Enumeration.FromName<Currency>(account.CurrencyName);
         IsDefault = account.IsDefault;
     }
     
