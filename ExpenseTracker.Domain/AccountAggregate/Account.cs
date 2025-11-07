@@ -35,16 +35,25 @@ public class Account : Entity
     public IReadOnlyCollection<RecurringRule> RecurringRules => _recurringRules.AsReadOnly();
 
     public static Account Create(
+        IEnumerable<Account> existingAccounts,
         string name,
         decimal balance,
         int currencyId,
         Guid userId,
-        bool isDefault)
+        bool requestedAsDefault)
     {
         if (string.IsNullOrEmpty(name))
             throw new ArgumentNullException(nameof(name), "Name cannot be null or empty");
         if (balance < 0)
             throw new ArgumentOutOfRangeException(nameof(balance), balance, $"Account balance cannot be negative.");
+        
+        if (existingAccounts is null)
+            throw new ArgumentNullException(nameof(existingAccounts));
+        
+        var isDefault = !existingAccounts.Any() || requestedAsDefault;
+
+        if (isDefault && existingAccounts.Any(a => a.IsDefault))
+            UnsetCurrentDefault(existingAccounts);
         
         return new Account(
             name, 
@@ -62,10 +71,18 @@ public class Account : Entity
         Name = FormatName(newName);
     }
 
-    public void SetAsDefault() => IsDefault = true;
+    public void SetAsDefault(IEnumerable<Account> existingAccounts)
+    {
+        if (existingAccounts is null)
+            throw new ArgumentNullException(nameof(existingAccounts));
+        
+        if (existingAccounts.Any(a => a.IsDefault))
+            UnsetCurrentDefault(existingAccounts);
+        
+        IsDefault = true;   
+    }
     
-    public void UnsetAsDefault() => IsDefault = false;
-    
+    private void UnsetAsDefault() => IsDefault = false;
     
     internal void Deposit(decimal amount)
     {
@@ -174,5 +191,11 @@ public class Account : Entity
     {
         if (Currency != currency)
             throw new InvalidOperationException("Transaction currency must match account currency.");
+    }
+    
+    private static void UnsetCurrentDefault(IEnumerable<Account> existingAccounts)
+    {
+        var currentDefault = existingAccounts.FirstOrDefault(a => a.IsDefault);
+        currentDefault!.UnsetAsDefault();
     }
 }

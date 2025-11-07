@@ -53,13 +53,23 @@ public class Seeder
                                       u.Role == Role.Admin);
         if (admin is null)
             return;
+        
+        var accounts = await _dbContext.Accounts
+            .Where(a => a.UserId == admin.Id)
+            .ToListAsync();
 
-        var account = Account.Create("Test", 100_000m, Currency.UZB.Id, admin.Id, true);
+        var account = Account.Create(
+            accounts,
+            "Test",
+            100_000m,
+            Currency.UZS.Id,
+            admin.Id,
+            true);
         
         account.AddTransaction(
             "Initial balance",
             23_000m,
-            Currency.UZB.Id,
+            Currency.UZS.Id,
             TransactionType.Expense.Id,
             TransactionSource.Manual.Id,
             DateTime.UtcNow.AddHours(-4),
@@ -91,7 +101,7 @@ public class Seeder
         account.AddRecurringRule(
             name: "Daily test expense",
             amount: 5_000m,
-            currencyId: Currency.UZB.Id,
+            currencyId: Currency.UZS.Id,
             categoryId: null,
             transactionTypeId: TransactionType.Expense.Id,
             recurringFrequencyId: RecurringFrequency.Daily.Id, // предположим, что есть перечисление

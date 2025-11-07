@@ -3,15 +3,14 @@ using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 
 namespace ExpenseTracker.Application.Models.AccountDTOs;
 
-public class AccountGetDTO
+public class AccountViewDTO
 {
-    public AccountGetDTO(Account account)
+    public AccountViewDTO(Account account)
     {
         Id = account.Id;
         Name = account.Name;
         Balance = account.Balance;
         Currency = account.Currency;
-        UserId = account.UserId;
         IsDefault = account.IsDefault;
     }
     
@@ -19,6 +18,5 @@ public class AccountGetDTO
     public string Name { get; init; }
     public decimal Balance  { get; init; }
     public Currency Currency { get; init; }
-    public Guid UserId { get; init; }
     public bool IsDefault { get; init; }
 }
