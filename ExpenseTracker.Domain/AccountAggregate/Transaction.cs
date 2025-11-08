@@ -31,7 +31,7 @@ public class Transaction : Entity
     }
     
     public string Name { get; private set; }
-    public decimal Amount { get; set; }
+    public decimal Amount { get; private set; }
     public Currency Currency { get; private set; }
     public string? Description { get; private set; }
     public Guid? CategoryId { get; private set; }
@@ -49,11 +49,15 @@ public class Transaction : Entity
         int transactionTypeId,
         int transactionSourceId,
         Guid accountId,
-        DateTime date,
+        DateTime? date,
         string? description,
         Guid? categoryId)
     {
-        Validate(name, amount, accountId, date); 
+        var transactionDate = (date == null || date == default)
+            ? DateTime.UtcNow
+            : date.Value;
+        
+        Validate(name, amount, accountId); 
         
         return new Transaction(
             name, 
@@ -62,12 +66,12 @@ public class Transaction : Entity
             transactionTypeId,
             transactionSourceId,
             accountId,
-            date,
+            transactionDate,
             description,
             categoryId);
     }
     
-    private static void Validate(string name, decimal amount, Guid accountId, DateTime date)
+    private static void Validate(string name, decimal amount, Guid accountId)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Transaction name cannot be null or empty.", nameof(name));
@@ -77,12 +81,6 @@ public class Transaction : Entity
 
         if (accountId == Guid.Empty)
             throw new ArgumentException("AccountId must be a valid GUID.", nameof(accountId));
-
-        if (date == default)
-            throw new ArgumentException("Transaction date must be specified.", nameof(date));
-
-        if (date > DateTime.UtcNow.AddDays(1))
-            throw new ArgumentOutOfRangeException(nameof(date), date, "Transaction date cannot be in the far future.");
     }
     
     public void Rename(string newName)

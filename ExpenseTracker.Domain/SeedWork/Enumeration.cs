@@ -47,8 +47,7 @@ public abstract class Enumeration : IComparable
         Parse<T, string>(name, e => e.Name == name, "name");
 
     private static T Parse<T, K>(K value, Func<T, bool> predicate, string valueType) where T : Enumeration
-    {
-        var matchingItem = GetAll<T>().FirstOrDefault(predicate);
+    { var matchingItem = GetAll<T>().FirstOrDefault(predicate);
         if (matchingItem is null)
             throw new InvalidOperationException($"'{value}' is not a valid {valueType} for {typeof(T).Name}");
         return matchingItem;

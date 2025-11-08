@@ -22,7 +22,7 @@ public class AccountController : BaseApiController
         {
             var query = new GetAllAccountsQuery();
             var result = await Mediator.Send(query);
-            var response = Response<AccountViewDTO>.Success(result.ToList());
+            var response = Response<IEnumerable<AccountViewDTO>>.Success(result);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
@@ -37,7 +37,7 @@ public class AccountController : BaseApiController
     {
         try
         {
-            var command = new CreateNewAccountCommand(accountDto);
+            var command = new CreateAccountCommand(accountDto);
             var result = await Mediator.Send(command);
             var response = Response<AccountViewDTO>.Success(result);
             return StatusCode(response.StatusCode, response);

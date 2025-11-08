@@ -16,7 +16,15 @@ public class AccountRepository : IAccountRepository
     
     public Task<Account> FindByIdAsync(Guid accountId)
     {
-        throw new NotImplementedException();
+        var account = _dbContext.Accounts
+            .Include(a => a.Transactions)
+            .Include(a => a.RecurringRules)
+            .FirstOrDefaultAsync(a => a.Id == accountId);
+        
+        if (account is null)
+            throw new KeyNotFoundException($"Account with ID '{accountId}' was not found.");
+        
+        return account;
     }
 
     public async Task<IEnumerable<Account>> FindAllByUserIdAsync(Guid userId)
@@ -26,6 +34,19 @@ public class AccountRepository : IAccountRepository
             .ToListAsync();
         
         return accounts;
+    }
+
+    public async Task<Account> FindDefaultByUserIdAsync(Guid userId)
+    {
+        var account = await _dbContext.Accounts
+            .Include(a => a.Transactions)
+            .Include(a => a.RecurringRules)
+            .FirstOrDefaultAsync(a => a.UserId == userId && a.IsDefault);
+        
+        if (account is null)
+            throw new KeyNotFoundException($"Account with ID '{userId}' was not found.");
+        
+        return account;
     }
 
     public async Task AddAsync(Account account)

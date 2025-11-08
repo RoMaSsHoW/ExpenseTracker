@@ -103,13 +103,13 @@ public class Account : Entity
         Balance -= amount;
     }
 
-    public void AddTransaction(
+    public Transaction AddTransaction(
         string name,
         decimal amount,
         int currencyId,
         int transactionTypeId,
         int transactionSourceId,
-        DateTime date,
+        DateTime? date,
         string? description,
         Guid? categoryId)
     {
@@ -133,6 +133,8 @@ public class Account : Entity
             Deposit(amount);
         
         _transactions.Add(transaction);
+        
+        return transaction;
     }
 
     public void RemoveTransaction(Guid transactionId)

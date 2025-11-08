@@ -7,13 +7,13 @@ using ExpenseTracker.Domain.AccountAggregate.Interfaces;
 
 namespace ExpenseTracker.Application.Commands.AccountCommands;
 
-public class CreateNewAccountCommandHandler : ICommandHandler<CreateNewAccountCommand, AccountViewDTO>
+public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand, AccountViewDTO>
 {
     private readonly IHttpAccessor _accessor;
     private readonly IAccountRepository _accountRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateNewAccountCommandHandler(
+    public CreateAccountCommandHandler(
         IHttpAccessor accessor,
         IAccountRepository accountRepository,
         IUnitOfWork unitOfWork)
@@ -23,7 +23,7 @@ public class CreateNewAccountCommandHandler : ICommandHandler<CreateNewAccountCo
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<AccountViewDTO> Handle(CreateNewAccountCommand request, CancellationToken cancellationToken)
+    public async Task<AccountViewDTO> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
         var userId = _accessor.GetUserId() 
                      ?? throw new UnauthorizedAccessException("User is not authenticated.");
