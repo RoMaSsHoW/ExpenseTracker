@@ -48,4 +48,38 @@ public class TransactionController : BaseApiController
             return StatusCode(response.StatusCode, response);
         }
     }
+
+    [HttpPut("edit-transaction")]
+    public async Task<IActionResult> EditTransaction([FromBody] TransactionEditDTO transaction)
+    {
+        try
+        {
+            var command = new EditTransactionCommand(transaction);
+            var result = await Mediator.Send(command);
+            var response = Response<TransactionViewDTO>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpDelete("delete-transactions")]
+    public async Task<IActionResult> DeleteTransactions([FromQuery] TransactionDeleteDTO transaction)
+    {
+        try
+        {
+            var command = new DeleteTransactionCommand(transaction);
+            await Mediator.Send(command);
+            var response = Response<object>.Success();
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
 }

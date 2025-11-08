@@ -3,7 +3,6 @@ using Dapper;
 using ExpenseTracker.Application.Common.Messaging;
 using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Application.Models.TransactionDTOs;
-using ExpenseTracker.Domain.AccountAggregate.Interfaces;
 
 namespace ExpenseTracker.Application.Queries.TransactionQueries;
 
