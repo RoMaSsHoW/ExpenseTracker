@@ -17,6 +17,8 @@ public static class ServiceExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        SetCorsPolicy(services, configuration);
+        
         services.AddInfrastructureServices(configuration);
 
         ConfigureJwtAuthenticationAndAuthorization(services, configuration);
@@ -32,6 +34,19 @@ public static class ServiceExtensions
         return services;
     }
 
+    private static void SetCorsPolicy(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+    }
+    
     private static void ConfigureJwtAuthenticationAndAuthorization(IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = configuration.GetSection(nameof(JWTSettings)).Get<JWTSettings>();
