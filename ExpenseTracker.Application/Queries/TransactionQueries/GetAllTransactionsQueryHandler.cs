@@ -28,6 +28,7 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
         var sqlBase = @"
             FROM transactions t
             INNER JOIN accounts a ON t.account_id = a.id AND a.is_default = TRUE
+            LEFT JOIN categories c ON t.category_id = c.id
             WHERE a.user_id = @UserId";
 
         var parameters = new DynamicParameters();
@@ -89,6 +90,7 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
                 t.currency AS CurrencyName,
                 t.description AS Description,
                 t.category_id AS CategoryId,
+                c.name AS CategoryName,
                 t.type AS TypeName,
                 t.account_id AS AccountId,
                 t.date AS Date

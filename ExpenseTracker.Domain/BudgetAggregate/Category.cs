@@ -43,12 +43,13 @@ public class Category : Entity
 
     public static Category CreateDefault(
         string name,
-        int transactionTypeId)
+        int transactionTypeId,
+        Guid userId)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Category name cannot be empty.", nameof(name));
         
-        return new Category(name, transactionTypeId, null, true);
+        return new Category(name, transactionTypeId, userId, true);
     }
 
     public void Rename(string newName)

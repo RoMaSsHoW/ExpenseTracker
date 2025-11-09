@@ -8,6 +8,7 @@ public class TransactionGetDTO
     public string CurrencyName { get; init; }
     public string? Description { get; init; }
     public Guid? CategoryId { get; init; }
+    public string? CategoryName { get; init; }
     public string TypeName { get; init; }
     public Guid AccountId { get; init; }
     public DateTime Date { get; init; }

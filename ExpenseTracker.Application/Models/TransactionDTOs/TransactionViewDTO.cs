@@ -27,6 +27,7 @@ public class TransactionViewDTO
         Currency = Enumeration.FromName<Currency>(transaction.CurrencyName);
         Description = transaction.Description;
         CategoryId = transaction.CategoryId;
+        CategoryName = transaction.CategoryName;
         Type = Enumeration.FromName<TransactionType>(transaction.TypeName);
         AccountId = transaction.AccountId;
         Date = transaction.Date;
@@ -38,6 +39,7 @@ public class TransactionViewDTO
     public Currency Currency { get; init; }
     public string? Description { get; init; }
     public Guid? CategoryId { get; init; }
+    public string? CategoryName { get; init; }
     public TransactionType Type { get; init; }
     public Guid AccountId { get; init; }
     public DateTime Date { get; init; }

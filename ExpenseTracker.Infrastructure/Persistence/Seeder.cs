@@ -2,6 +2,7 @@ using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
+using ExpenseTracker.Domain.BudgetAggregate;
 using ExpenseTracker.Domain.UserAggregate;
 using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ public class Seeder
         await SeedUsers();
         await SeedAccounts();
         await SeedRecurringRule();
+        await SeedCategories();
     }
 
     private async Task SeedUsers()
@@ -106,6 +108,24 @@ public class Seeder
             startDate: DateTime.UtcNow // сегодня
         );
         
+        await _dbContext.SaveChangesAsync();
+    }
+    
+    private async Task SeedCategories()
+    {
+        if (await _dbContext.Categories.AnyAsync())
+            return;
+        
+        var admin = await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email.Address == "admin@gmail.com" &&
+                                      u.Role == Role.Admin);
+
+        var category = Category.CreateDefault(
+            "Test",
+            TransactionType.Expense.Id,
+            admin.Id);
+        
+        await _dbContext.Categories.AddAsync(category);
         await _dbContext.SaveChangesAsync();
     }
 }
