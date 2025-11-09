@@ -23,7 +23,7 @@ public class RecurringRule : Entity
         CategoryId = categoryId;
         Type = Enumeration.FromId<TransactionType>(transactionTypeId);
         Frequency = Enumeration.FromId<RecurringFrequency>(recurringFrequencyId);
-        NextRunAt = startDate.Date <= DateTime.UtcNow.Date ? CalculateNextRun(startDate) : startDate;
+        NextRunAt = startDate.Date == DateTime.UtcNow.Date ? CalculateNextRun(startDate) : startDate;
         AccountId = accountId;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;
@@ -55,6 +55,8 @@ public class RecurringRule : Entity
             throw new ArgumentNullException(nameof(name), "Recurring rule name cannot be null or empty.");
         if (amount <= 0)
             throw new ArgumentOutOfRangeException(nameof(amount), "Recurring rule amount cannot be zero or negative.");
+        if (startDate.Date < DateTime.UtcNow.Date)
+            throw new ArgumentOutOfRangeException(nameof(startDate), "Start date cannot be in the past.");
         
         return new RecurringRule(
             name, 
@@ -70,6 +72,45 @@ public class RecurringRule : Entity
     public void Deactivate() => IsActive = false;
 
     public void Activate() => IsActive = true;
+
+    public void Rename(string newName)
+    {
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new ArgumentNullException(nameof(newName), "Recurring rule name cannot be null or empty.");   
+        
+        Name = newName;
+    }
+    
+    public void ChangeAmount(decimal newAmount)
+    {
+        if (newAmount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(newAmount), "Recurring rule amount cannot be zero or negative.");
+        
+        Amount = newAmount;
+    }
+
+    public void ChangeCategory(Guid? newCategoryId)
+    {
+        CategoryId = newCategoryId;
+    }
+    
+    public void ChangeType(int newTransactionTypeId)
+    {
+        Type = Enumeration.FromId<TransactionType>(newTransactionTypeId);
+    }
+
+    public void ChangeFrequency(int newRecurringFrequencyId)
+    {
+        Frequency = Enumeration.FromId<RecurringFrequency>(newRecurringFrequencyId);
+    }
+
+    public void ChangeNextRunAt(DateTime newNextRunAt)
+    {
+        if (newNextRunAt.Date < DateTime.UtcNow.Date)
+            throw new ArgumentOutOfRangeException(nameof(newNextRunAt), "Start date cannot be in the past.");
+
+        NextRunAt = newNextRunAt.Date == DateTime.UtcNow.Date ? CalculateNextRun(newNextRunAt) : newNextRunAt;
+    }
     
     public void CreateAutoTransaction()
     {

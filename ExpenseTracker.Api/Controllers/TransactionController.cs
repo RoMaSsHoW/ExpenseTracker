@@ -67,7 +67,7 @@ public class TransactionController : BaseApiController
     }
 
     [HttpDelete("delete-transactions")]
-    public async Task<IActionResult> DeleteTransactions([FromQuery] TransactionDeleteDTO transaction)
+    public async Task<IActionResult> DeleteTransactions([FromBody] TransactionDeleteDTO transaction)
     {
         try
         {

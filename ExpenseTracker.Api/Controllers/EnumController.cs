@@ -22,13 +22,13 @@ public class EnumController : BaseApiController
         return StatusCode(response.StatusCode, response);
     }
 
-    // [HttpGet("get-transaction-type")]
-    // public IActionResult GetTransactionType()
-    // {
-    //     var result = Enumeration.GetAll<TransactionType>();
-    //     var response = Response<IEnumerable<TransactionType>>.Success(result);
-    //     return StatusCode(response.StatusCode, response);
-    // }
+    [HttpGet("get-transaction-type")]
+    public IActionResult GetTransactionType()
+    {
+        var result = Enumeration.GetAll<TransactionType>();
+        var response = Response<IEnumerable<TransactionType>>.Success(result);
+        return StatusCode(response.StatusCode, response);
+    }
 
     [HttpGet("get-recurring-frequency")]
     public IActionResult GetRecurringFrequency()

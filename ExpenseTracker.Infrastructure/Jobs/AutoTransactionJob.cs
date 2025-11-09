@@ -27,7 +27,7 @@ public class AutoTransactionJob : IJob
                 if (!rule.IsActive) 
                     continue;
 
-                if (rule.NextRunAt.Date == DateTime.UtcNow.Date)
+                if (rule.NextRunAt.Date <= DateTime.UtcNow.Date)
                 {
                     try
                     {

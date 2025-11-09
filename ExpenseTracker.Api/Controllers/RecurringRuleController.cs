@@ -46,4 +46,38 @@ public class RecurringRuleController : BaseApiController
             return StatusCode(response.StatusCode, response);
         }
     }
+
+    [HttpPut("edit-recurring-rule")]
+    public async Task<IActionResult> EditRecurringRule([FromBody] RecurringRuleEditDTO recurringRule)
+    {
+        try
+        {
+            var command = new EditRecurringRuleCommand(recurringRule);
+            var result = await Mediator.Send(command);
+            var response = Response<RecurringRuleViewDTO>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpDelete("delete-recurring-rules")]
+    public async Task<IActionResult> DeleteRecurringRules([FromBody] RecurringRuleDeleteDTO recurringRule)
+    {
+        try
+        {
+            var command = new DeleteRecurringRuleCommand(recurringRule);
+            await Mediator.Send(command);
+            var response = Response<object>.Success();
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
 }
