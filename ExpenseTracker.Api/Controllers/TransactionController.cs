@@ -22,7 +22,7 @@ public class TransactionController : BaseApiController
         {
             var query = new GetAllTransactionsQuery(filter);
             var result = await Mediator.Send(query);
-            var response = Response<IEnumerable<TransactionViewDTO>>.Success(result);
+            var response = Response<PaginatedTransactionsDTO>.Success(result);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
