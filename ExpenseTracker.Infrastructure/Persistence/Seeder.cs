@@ -69,7 +69,6 @@ public class Seeder
         account.AddTransaction(
             "Initial balance",
             23_000m,
-            Currency.UZS.Id,
             TransactionType.Expense.Id,
             TransactionSource.Manual.Id,
             DateTime.UtcNow.AddHours(-4),
@@ -101,7 +100,6 @@ public class Seeder
         account.AddRecurringRule(
             name: "Daily test expense",
             amount: 5_000m,
-            currencyId: Currency.UZS.Id,
             categoryId: null,
             transactionTypeId: TransactionType.Expense.Id,
             recurringFrequencyId: RecurringFrequency.Daily.Id, // предположим, что есть перечисление

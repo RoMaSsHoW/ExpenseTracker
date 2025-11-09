@@ -34,7 +34,6 @@ public class CreateTransactionCommandHandler : ICommandHandler<CreateTransaction
         var addedTransaction = account.AddTransaction(
             transactionDto.Name,
             transactionDto.Amount,
-            transactionDto.CurrencyId,
             transactionDto.TransactionTypeId,
             TransactionSource.Manual.Id,
             transactionDto.Date,

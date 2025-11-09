@@ -1,6 +1,6 @@
 namespace ExpenseTracker.Application.Models.TransactionDTOs;
 
-public class TransactionFilterForGetAll
+public class FilterForGetAllTransaction
 {
     public string? Name { get; init; }
     public decimal? AmountFrom { get; init; }

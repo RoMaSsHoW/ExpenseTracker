@@ -106,20 +106,16 @@ public class Account : Entity
     public Transaction AddTransaction(
         string name,
         decimal amount,
-        int currencyId,
         int transactionTypeId,
         int transactionSourceId,
         DateTime? date,
         string? description,
         Guid? categoryId)
     {
-        var transactionCurrency = GetCurrency(currencyId);
-        EnsureCurrencyMatch(transactionCurrency);
-        
         var transaction = Transaction.Create(
             name, 
             amount, 
-            currencyId,
+            Currency.Id,
             transactionTypeId,
             transactionSourceId,
             Id,
@@ -150,22 +146,18 @@ public class Account : Entity
         _transactions.Remove(transaction);
     }
 
-    public void AddRecurringRule(
+    public RecurringRule AddRecurringRule(
         string name,
         decimal amount,
-        int currencyId,
         Guid? categoryId,
         int transactionTypeId,
         int recurringFrequencyId,
         DateTime startDate)
     {
-        var ruleCurrency = GetCurrency(currencyId);
-        EnsureCurrencyMatch(ruleCurrency);
-
         var recyrringRule = RecurringRule.Create(
             name,
             amount,
-            currencyId,
+            Currency.Id,
             categoryId,
             transactionTypeId,
             recurringFrequencyId,
@@ -173,6 +165,8 @@ public class Account : Entity
             Id);
         
         _recurringRules.Add(recyrringRule);
+        
+        return recyrringRule;
     }
 
     public void RemoveRecurringRule(Guid ruleId)
@@ -185,15 +179,6 @@ public class Account : Entity
     
     private static string FormatName(string name) =>
         CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
-    
-    private static Currency GetCurrency(int currencyId) =>
-        Enumeration.FromId<Currency>(currencyId);
-
-    private void EnsureCurrencyMatch(Currency currency)
-    {
-        if (Currency != currency)
-            throw new InvalidOperationException("Transaction currency must match account currency.");
-    }
     
     private static void UnsetCurrentDefault(IEnumerable<Account> existingAccounts)
     {

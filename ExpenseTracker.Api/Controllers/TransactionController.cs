@@ -16,7 +16,7 @@ public class TransactionController : BaseApiController
     { }
 
     [HttpGet("get-all-account-transactions")]
-    public async Task<IActionResult> GetAllTransactions([FromQuery] TransactionFilterForGetAll filter)
+    public async Task<IActionResult> GetAllTransactions([FromQuery] FilterForGetAllTransaction filter)
     {
         try
         {

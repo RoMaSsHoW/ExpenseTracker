@@ -78,8 +78,7 @@ public class RecurringRule : Entity
         
         Account.AddTransaction(
             Name, 
-            Amount, 
-            Currency.Id,
+            Amount,
             Type.Id,
             TransactionSource.Auto.Id, 
             NextRunAt,
