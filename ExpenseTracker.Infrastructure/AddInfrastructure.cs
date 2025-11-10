@@ -33,7 +33,8 @@ public static class AddInfrastructure
         services.AddScoped<Seeder>();
         
         services.AddTransient<ITokenService, TokenService>();
-
+        services.AddTransient<IDocumentService, DocumentService>();
+        
         ConfigureQuartz(services);
         
         return services;

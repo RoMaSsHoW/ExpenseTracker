@@ -25,6 +25,18 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
+    public async Task<IEnumerable<Category>> FindByIdsAsync(List<Guid> categoryIds)
+    {
+        if (categoryIds == null || categoryIds.Count == 0)
+            return Enumerable.Empty<Category>();
+
+        var categories = await _dbContext.Categories
+            .Where(c => categoryIds.Contains(c.Id))
+            .ToListAsync();
+
+        return categories;
+    }
+
     public async Task AddAsync(Category category)
     {
         await _dbContext.Categories.AddAsync(category);

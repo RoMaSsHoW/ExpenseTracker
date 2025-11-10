@@ -6,12 +6,12 @@ using ExpenseTracker.Application.Models.TransactionDTOs;
 
 namespace ExpenseTracker.Application.Queries.TransactionQueries;
 
-public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQuery, IEnumerable<TransactionViewDTO>>
+public class GetAllPaginatedTransactionsQueryHandler : IQueryHandler<GetAllPaginatedTransactionsQuery, PaginatedTransactionsDTO>
 {
     private readonly IDbConnection _dbConnection;
     private readonly IHttpAccessor _accessor;
 
-    public GetAllTransactionsQueryHandler(
+    public GetAllPaginatedTransactionsQueryHandler(
         IDbConnection dbConnection,
         IHttpAccessor accessor)
     {
@@ -19,7 +19,7 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
         _accessor = accessor;
     }
 
-    public async Task<IEnumerable<TransactionViewDTO>> Handle(GetAllTransactionsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedTransactionsDTO> Handle(GetAllPaginatedTransactionsQuery request, CancellationToken cancellationToken)
     {
         var userId = _accessor.GetUserId();
         if (userId == Guid.Empty)
@@ -74,7 +74,14 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
             sqlBase += " AND t.date <= @DateTo";
             parameters.Add("DateTo", DateTime.UtcNow);
         }
-        
+
+        var countSql = $"SELECT COUNT(*) {sqlBase}";
+        var totalCount = await _dbConnection.ExecuteScalarAsync<int>(countSql, parameters);
+
+        var pageNumber = request.Filter.PageNumber <= 0 ? 1 : request.Filter.PageNumber;
+        var pageSize = request.Filter.PageSize <= 0 ? 10 : request.Filter.PageSize;
+        var offset = (pageNumber - 1) * pageSize;
+
         var sql = $@"
             SELECT
                 t.id AS Id,
@@ -88,10 +95,22 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
                 t.account_id AS AccountId,
                 t.date AS Date
             {sqlBase}
-            ORDER BY t.date DESC";
+            ORDER BY t.date DESC
+            LIMIT @PageSize OFFSET @Offset";
+
+        parameters.Add("PageSize", pageSize);
+        parameters.Add("Offset", offset);
 
         var transactions = await _dbConnection.QueryAsync<TransactionGetDTO>(sql, parameters);
 
-        return transactions.Select(t => new TransactionViewDTO(t));
+        var viewList = transactions.Select(t => new TransactionViewDTO(t));
+
+        return new PaginatedTransactionsDTO
+        {
+            Items = viewList,
+            TotalCount = totalCount,
+            PageNumber = pageNumber,
+            PageSize = pageSize
+        };
     }
 }

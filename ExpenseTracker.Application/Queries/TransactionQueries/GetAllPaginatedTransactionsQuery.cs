@@ -3,5 +3,5 @@ using ExpenseTracker.Application.Models.TransactionDTOs;
 
 namespace ExpenseTracker.Application.Queries.TransactionQueries;
 
-public record GetAllTransactionsQuery(FilterForGetAllTransaction Filter) 
-    : IQuery<IEnumerable<TransactionViewDTO>>;
+public record GetAllPaginatedTransactionsQuery(FilterForGetAllTransaction Filter) 
+    : IQuery<PaginatedTransactionsDTO>;

@@ -40,6 +40,14 @@ public class EnumController : BaseApiController
         return StatusCode(response.StatusCode, response);
     }
 
+    [HttpGet("get-document-extension")]
+    public IActionResult GetDocumentExtension()
+    {
+        var result = Enumeration.GetAll<DocumentExtension>();
+        var response = Response<IEnumerable<DocumentExtension>>.Success(result);
+        return StatusCode(response.StatusCode, response);
+    }
+
     [HttpGet("get-categories")]
     public async Task<IActionResult> GetAllCategories()
     {
