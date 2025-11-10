@@ -34,6 +34,11 @@ public class EditRecurringRuleCommandHandler : ICommandHandler<EditRecurringRule
         if (recurringRule is null)
             throw new KeyNotFoundException($"Recurring Rule with ID '{recurringRuleDto.Id}' was not found in the default account.");
         
+        if(recurringRuleDto.IsActive)
+            recurringRule.Activate();
+        else
+            recurringRule.Deactivate();
+        
         recurringRule.Rename(recurringRuleDto.Name);
         recurringRule.ChangeAmount(recurringRuleDto.Amount);
         recurringRule.ChangeCategory(recurringRuleDto.CategoryId);

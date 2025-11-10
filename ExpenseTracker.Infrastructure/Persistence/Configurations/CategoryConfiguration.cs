@@ -1,5 +1,5 @@
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
-using ExpenseTracker.Domain.BudgetAggregate;
+using ExpenseTracker.Domain.CategoryAggregate;
 using ExpenseTracker.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

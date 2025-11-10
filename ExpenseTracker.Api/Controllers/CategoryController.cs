@@ -1,3 +1,4 @@
+using ExpenseTracker.Application.Commands.CategoryCommands;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.CategoryDTOs;
 using ExpenseTracker.Application.Queries.CategoryQueries;
@@ -20,6 +21,57 @@ public class CategoryController : BaseApiController
             var query = new GetAllCategoriesQuery();
             var result = await Mediator.Send(query);
             var response = Response<IEnumerable<CategoryViewDTO>>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpPost("create-category")]
+    public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateDTO category)
+    {
+        try
+        {
+            var command = new CreateCategoryCommand(category);
+            var result = await Mediator.Send(command);
+            var response = Response<CategoryViewDTO>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpPut("edit-category")]
+    public async Task<IActionResult> EditCategory([FromBody] CategoryEditDTO category)
+    {
+        try
+        {
+            var command = new EditCategoryCommand(category);
+            var result = await Mediator.Send(command);
+            var response = Response<CategoryViewDTO>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpDelete("delete-category")]
+    public async Task<IActionResult> DeleteCategory([FromBody] CategoryDeleteDTO category)
+    {
+        try
+        {
+            var command = new DeleteCategoryCommand(category);
+            await Mediator.Send(command);
+            var response = Response<bool>.Success();
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)

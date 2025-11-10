@@ -1,5 +1,5 @@
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
-using ExpenseTracker.Domain.BudgetAggregate;
+using ExpenseTracker.Domain.CategoryAggregate;
 using ExpenseTracker.Domain.SeedWork;
 
 namespace ExpenseTracker.Application.Models.CategoryDTOs;

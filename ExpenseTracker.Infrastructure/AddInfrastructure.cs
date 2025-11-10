@@ -1,6 +1,7 @@
 using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Domain.AccountAggregate.Interfaces;
+using ExpenseTracker.Domain.CategoryAggregate.Interfaces;
 using ExpenseTracker.Domain.UserAggregate.Interfaces;
 using ExpenseTracker.Infrastructure.Jobs;
 using ExpenseTracker.Infrastructure.Persistence;
@@ -27,6 +28,7 @@ public static class AddInfrastructure
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<Seeder>();
         

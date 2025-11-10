@@ -2,7 +2,7 @@ using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
-using ExpenseTracker.Domain.BudgetAggregate;
+using ExpenseTracker.Domain.CategoryAggregate;
 using ExpenseTracker.Domain.UserAggregate;
 using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
