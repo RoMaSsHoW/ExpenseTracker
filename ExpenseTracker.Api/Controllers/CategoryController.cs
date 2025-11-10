@@ -3,10 +3,12 @@ using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.CategoryDTOs;
 using ExpenseTracker.Application.Queries.CategoryQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Api.Controllers;
 
+[Authorize]
 public class CategoryController : BaseApiController
 {
     public CategoryController(IMediator mediator) 

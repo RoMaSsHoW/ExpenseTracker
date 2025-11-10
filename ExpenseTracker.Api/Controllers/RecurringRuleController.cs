@@ -3,10 +3,12 @@ using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.RecurringRuleDTOs;
 using ExpenseTracker.Application.Queries.RecurringRuleQueries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Api.Controllers;
 
+[Authorize]
 public class RecurringRuleController : BaseApiController
 {
     public RecurringRuleController(IMediator mediator)

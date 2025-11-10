@@ -81,12 +81,14 @@ public static class ServiceExtensions
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
 
-                        var json = JsonSerializer.Serialize(new
+                        var response = Response<object>.Fail(
+                            "Unauthorized: токен отсутствует, просрочен или недействителен.",
+                            StatusCodes.Status401Unauthorized
+                        );
+
+                        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions
                         {
-                            errors = new
-                            {
-                                message = "Unauthorized: токен отсутствует, просрочен или недействителен."
-                            }
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                         });
 
                         await context.Response.WriteAsync(json);
@@ -97,12 +99,14 @@ public static class ServiceExtensions
                         context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         context.Response.ContentType = "application/json";
 
-                        var json = JsonSerializer.Serialize(new
+                        var response = Response<object>.Fail(
+                            "Forbidden: у вас нет доступа к этому ресурсу.",
+                            StatusCodes.Status403Forbidden
+                        );
+
+                        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions
                         {
-                            errors = new
-                            {
-                                message = "Forbidden: у вас нет доступа к этому ресурсу."
-                            }
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                         });
 
                         await context.Response.WriteAsync(json);
@@ -113,12 +117,14 @@ public static class ServiceExtensions
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         context.Response.ContentType = "application/json";
 
-                        var json = JsonSerializer.Serialize(new
+                        var response = Response<object>.Fail(
+                            $"Authentication failed: {context.Exception.Message}",
+                            StatusCodes.Status401Unauthorized
+                        );
+
+                        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions
                         {
-                            errors = new
-                            {
-                                message = "Authentication failed: " + context.Exception.Message
-                            }
+                            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                         });
 
                         await context.Response.WriteAsync(json);
