@@ -11,10 +11,10 @@ public class Category : Entity
     private Category(
         string name,
         int transactionTypeId,
-        Guid? userId,
+        Guid userId,
         bool isDefault)
     {
-        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
+        Name = FormatName(name);
         Type = Enumeration.FromId<TransactionType>(transactionTypeId);
         UserId = userId;
         IsDefault = isDefault;
@@ -23,7 +23,7 @@ public class Category : Entity
     
     public string Name { get; private set; }
     public TransactionType Type { get; private set; }
-    public Guid? UserId { get; private set; } 
+    public Guid UserId { get; private set; } 
     public DateTime CreatedAt { get; private set; }
     public bool IsDefault { get; private set; }
     
@@ -57,6 +57,14 @@ public class Category : Entity
         if (string.IsNullOrWhiteSpace(newName))
             throw new ArgumentException("New category name cannot be empty.", nameof(newName));
 
-        Name = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(newName.Trim().ToLower());
+        Name = FormatName(newName);
     }
+
+    public void ChangeType(int newTransactionTypeId)
+    {
+        Type = Enumeration.FromId<TransactionType>(newTransactionTypeId);   
+    }
+    
+    private static string FormatName(string name) =>
+        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
 }

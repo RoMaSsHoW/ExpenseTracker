@@ -27,7 +27,8 @@ public class CategoryConfiguration : IEntityTypeConfiguration<Category>
             .HasColumnName("type")
             .IsRequired();
         builder.Property(c => c.UserId)
-            .HasColumnName("user_id");
+            .HasColumnName("user_id")
+            .IsRequired();
         builder.Property(c => c.CreatedAt)
             .HasColumnName("created_at")
             .IsRequired();

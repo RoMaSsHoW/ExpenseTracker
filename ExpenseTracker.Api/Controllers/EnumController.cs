@@ -1,4 +1,6 @@
 using ExpenseTracker.Application.Models;
+using ExpenseTracker.Application.Models.CategoryDTOs;
+using ExpenseTracker.Application.Queries.CategoryQueries;
 using ExpenseTracker.Domain.AccountAggregate.ValueObjects;
 using ExpenseTracker.Domain.SeedWork;
 using MediatR;
@@ -36,5 +38,22 @@ public class EnumController : BaseApiController
         var result = Enumeration.GetAll<RecurringFrequency>();
         var response = Response<IEnumerable<RecurringFrequency>>.Success(result);
         return StatusCode(response.StatusCode, response);
+    }
+
+    [HttpGet("get-categories")]
+    public async Task<IActionResult> GetAllCategories()
+    {
+        try
+        {
+            var query = new GetAllCategoriesLikeEnumQuery();
+            var result = await Mediator.Send(query);
+            var response = Response<IEnumerable<CategoryEnumViewDTO>>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message);
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

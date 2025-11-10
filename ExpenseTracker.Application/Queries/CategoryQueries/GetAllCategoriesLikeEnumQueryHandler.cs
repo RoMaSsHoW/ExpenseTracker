@@ -2,16 +2,16 @@ using System.Data;
 using Dapper;
 using ExpenseTracker.Application.Common.Messaging;
 using ExpenseTracker.Application.Common.Services;
-using ExpenseTracker.Application.Models.AccountDTOs;
+using ExpenseTracker.Application.Models.CategoryDTOs;
 
-namespace ExpenseTracker.Application.Queries.AccountQueries;
+namespace ExpenseTracker.Application.Queries.CategoryQueries;
 
-public class GetAllAccountsQueryHandler : IQueryHandler<GetAllAccountsQuery, IEnumerable<AccountViewDTO>>
+public class GetAllCategoriesLikeEnumQueryHandler : IQueryHandler<GetAllCategoriesLikeEnumQuery, IEnumerable<CategoryEnumViewDTO>>
 {
     private readonly IDbConnection _dbConnection;
     private readonly IHttpAccessor _accessor;
 
-    public GetAllAccountsQueryHandler(
+    public GetAllCategoriesLikeEnumQueryHandler(
         IDbConnection dbConnection,
         IHttpAccessor accessor)
     {
@@ -19,28 +19,25 @@ public class GetAllAccountsQueryHandler : IQueryHandler<GetAllAccountsQuery, IEn
         _accessor = accessor;
     }
 
-    public async Task<IEnumerable<AccountViewDTO>> Handle(GetAllAccountsQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CategoryEnumViewDTO>> Handle(GetAllCategoriesLikeEnumQuery request, CancellationToken cancellationToken)
     {
         var userId = _accessor.GetUserId();
         if (userId == Guid.Empty)
             throw new UnauthorizedAccessException("User is not authenticated.");
-
+        
         var sql = @"
             SELECT 
                 id AS Id,
-                name AS Name,
-                balance AS Balance,
-                currency AS CurrencyName,
-                is_default AS IsDefault
-            FROM accounts
+                name AS Name
+            FROM categories
             WHERE user_id = @UserId
             ORDER BY name";
         
         var parameters = new DynamicParameters();
         parameters.Add("@UserId", userId, DbType.Guid);
         
-        var result = await _dbConnection.QueryAsync<AccountGetDTO>(sql, parameters);
+        var result = await _dbConnection.QueryAsync<CategoryEnumViewDTO>(sql, parameters);
 
-        return result.Select(account => new AccountViewDTO(account));
+        return result;
     }
 }
