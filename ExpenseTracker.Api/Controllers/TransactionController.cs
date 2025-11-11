@@ -1,3 +1,4 @@
+using ExpenseTracker.Api.Extentions;
 using ExpenseTracker.Application.Commands.TransactionCommands;
 using ExpenseTracker.Application.Common.Services;
 using ExpenseTracker.Application.Models;
@@ -94,15 +95,15 @@ public class TransactionController : BaseApiController
 
     [HttpGet("export-transactions")]
     public async Task<IActionResult> ExportTransactions(
-        [FromQuery] FilterForGetAllTransaction filter,
-        [FromQuery] int formatId = 1)
+        [FromQuery] FilterForGetAllTransactionInDocument filter,
+        [FromQuery] int documentExtensionId = 1)
     {
         try
         {   
             var query = new GetAllTransactionsQuery(filter);
             var result = await Mediator.Send(query);
 
-            var format = Enumeration.FromId<DocumentExtension>(formatId);
+            var format = Enumeration.FromId<DocumentExtension>(documentExtensionId);
             var stream = await _documentService.WriteAsync(result.ToList(), format);
             
             var contentType = format.Name == DocumentExtension.CSV.Name ? "text/csv" : 
@@ -120,11 +121,11 @@ public class TransactionController : BaseApiController
     }
 
     [HttpGet("get-import-template")]
-    public async Task<IActionResult> GetImportTemplate([FromQuery] int formatId = 1)
+    public async Task<IActionResult> GetImportTemplate([FromQuery] int documentExtensionId = 1)
     {
         try
         {
-            var format = Enumeration.FromId<DocumentExtension>(formatId);
+            var format = Enumeration.FromId<DocumentExtension>(documentExtensionId);
             var stream = await _documentService.GetTemplateAsync(format);
             
             var contentType = format.Name == DocumentExtension.CSV.Name ? "text/csv" : 
@@ -139,5 +140,24 @@ public class TransactionController : BaseApiController
             var response = Response<object>.Fail(ex.Message, 401);
             return StatusCode(response.StatusCode, response);
         }        
+    }
+
+    [HttpPost("import-transactions")]
+    public async Task<IActionResult> ImportTransactions(IFormFile file)
+    {
+        try
+        {
+            var command = new CreateTransactionsFromFileCommand(file);
+            await Mediator.Send(command);
+            var response = Response<object>.Success();
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 401);
+            return StatusCode(response.StatusCode, response);
+        }
     }
 }

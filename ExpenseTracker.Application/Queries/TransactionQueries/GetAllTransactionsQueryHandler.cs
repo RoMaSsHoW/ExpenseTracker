@@ -34,34 +34,18 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
         var parameters = new DynamicParameters();
         parameters.Add("UserId", userId);
 
-        if (!string.IsNullOrWhiteSpace(request.Filter.Name))
-        {
-            sqlBase += " AND t.name ILIKE @Name";
-            parameters.Add("Name", $"{request.Filter.Name}%");
-        }
-
-        if (request.Filter.AmountFrom is not null)
-        {
-            sqlBase += " AND t.amount >= @AmountFrom";
-            parameters.Add("AmountFrom", request.Filter.AmountFrom);
-        }
-
-        if (request.Filter.AmountTo is not null)
-        {
-            sqlBase += " AND t.amount <= @AmountTo";
-            parameters.Add("AmountTo", request.Filter.AmountTo);
-        }
-
-        if (request.Filter.CategoryId is not null)
-        {
-            sqlBase += " AND t.category_id = @CategoryId";
-            parameters.Add("CategoryId", request.Filter.CategoryId);
-        }
-
         if (request.Filter.DateFrom is not null)
         {
             sqlBase += " AND t.date >= @DateFrom";
             parameters.Add("DateFrom", request.Filter.DateFrom);
+        }
+        else
+        {
+            var now = DateTime.UtcNow;
+            var startOfMonth = new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            sqlBase += " AND t.date >= @DateFrom";
+            parameters.Add("DateFrom", startOfMonth);
         }
 
         if (request.Filter.DateTo is not null)

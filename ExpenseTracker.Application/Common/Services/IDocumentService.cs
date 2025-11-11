@@ -6,7 +6,7 @@ namespace ExpenseTracker.Application.Common.Services;
 
 public interface IDocumentService
 {
-    Task<List<TransactionCreateFromDocumentDTO>> ReadAsync(IFormFile file);
+    List<TransactionCreateFromDocumentDTO> ReadAsync(IFormFile file);
     Task<MemoryStream> WriteAsync(List<TransactionViewDTO> data, DocumentExtension format);
     Task<MemoryStream> GetTemplateAsync(DocumentExtension format);
 }

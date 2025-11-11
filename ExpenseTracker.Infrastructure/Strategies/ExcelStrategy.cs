@@ -30,9 +30,47 @@ public class ExcelStrategy : IDocumentStrategy
         { 7, 20 }
     };
     
-    public Task<List<TransactionCreateFromDocumentDTO>> ReadAsync(Stream stream)
+    public List<TransactionCreateFromDocumentDTO> ReadAsync(Stream stream)
     {
-        throw new NotImplementedException();
+        var transactions = new List<TransactionCreateFromDocumentDTO>();
+        using var workbook = new XLWorkbook(stream);
+        var worksheet = workbook.Worksheets.First();
+        foreach (var row in worksheet.Rows().Skip(1))
+        {
+            var name = row.Cell(1).GetValue<string>()?.Trim();
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
+            
+            var amountIncome = row.Cell(2).GetValue<double?>();
+            var amountExpense = row.Cell(3).GetValue<double?>();
+            var description = row.Cell(5).GetValue<string?>();
+            var category = row.Cell(6).GetValue<string?>();
+            var localDate = row.Cell(7).GetValue<DateTime?>();
+
+            DateTime? date = null;
+            if (localDate.HasValue)
+            {
+                var localZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneId);
+                date = TimeZoneInfo.ConvertTimeToUtc(localDate.Value, localZone);
+            }
+
+            var amount = amountIncome ?? amountExpense;
+            if (amount == null)
+                continue;
+            var typeId = amountIncome is null ? 2 : 1;
+            
+            transactions.Add(new TransactionCreateFromDocumentDTO()
+            {
+                Name = name,
+                Amount = (decimal)amount.Value,
+                Description = description,
+                TypeId = typeId,
+                Date = date ?? null,
+                CategoryName = category
+            });
+        }
+        
+        return transactions;
     }
 
     public async Task<MemoryStream> WriteAsync(List<TransactionViewDTO> data)

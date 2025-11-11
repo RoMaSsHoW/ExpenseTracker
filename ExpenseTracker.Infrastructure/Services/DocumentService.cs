@@ -19,7 +19,7 @@ public class DocumentService : IDocumentService
         };
     }
 
-    public async Task<List<TransactionCreateFromDocumentDTO>> ReadAsync(IFormFile file)
+    public List<TransactionCreateFromDocumentDTO> ReadAsync(IFormFile file)
     {
         var extension = Path.GetExtension(file.FileName).TrimStart('.').ToUpperInvariant();;
         
@@ -29,7 +29,7 @@ public class DocumentService : IDocumentService
         
         var strategy = GetStrategy(documentExtension);
         using var stream = file.OpenReadStream();
-        return await strategy.ReadAsync(stream);
+        return strategy.ReadAsync(stream);
     }  
 
     public async Task<MemoryStream> WriteAsync(List<TransactionViewDTO> data, DocumentExtension format)

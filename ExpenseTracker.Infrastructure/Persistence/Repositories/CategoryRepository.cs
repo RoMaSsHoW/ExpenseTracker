@@ -25,13 +25,15 @@ public class CategoryRepository : ICategoryRepository
         return category;
     }
 
-    public async Task<IEnumerable<Category>> FindByIdsAsync(List<Guid> categoryIds)
+    public async Task<IEnumerable<Category>> FindByNamesAsync(List<string> categoryNames)
     {
-        if (categoryIds == null || categoryIds.Count == 0)
-            return Enumerable.Empty<Category>();
-
+        if (categoryNames.Count == 0)
+            return [];
+        
+        var lowerNames = categoryNames.Select(n => n.ToLower()).ToList();
+        
         var categories = await _dbContext.Categories
-            .Where(c => categoryIds.Contains(c.Id))
+            .Where(c => lowerNames.Contains(c.Name.ToLower()))
             .ToListAsync();
 
         return categories;
