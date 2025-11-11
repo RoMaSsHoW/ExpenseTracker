@@ -58,7 +58,7 @@ public class CreateTransactionsFromFileCommandHandler : ICommandHandler<CreateTr
                 TransactionSource.Imported.Id,
                 transactionFromFile.Date,
                 transactionFromFile.Description,
-                categoryId);
+                categoryId == Guid.Empty ? null : categoryId);
         }
 
         await _unitOfWork.CommitAsync(cancellationToken);
