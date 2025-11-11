@@ -55,12 +55,27 @@ public class Account : Entity
         if (isDefault && existingAccounts.Any(a => a.IsDefault))
             UnsetCurrentDefault(existingAccounts);
         
-        return new Account(
+        var account = new Account(
             name, 
-            balance,
+            0,
             currencyId,
             userId,
             isDefault);
+
+        if (balance > 0)
+        {
+            account.AddTransaction(
+                "Стартовый баланс",
+                balance,
+                TransactionType.Income.Id,
+                TransactionSource.Manual.Id,
+                DateTime.UtcNow,
+                null,
+                null
+            );
+        }
+
+        return account;
     }
     
     public void Rename(string newName)
