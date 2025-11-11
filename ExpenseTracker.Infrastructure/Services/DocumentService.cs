@@ -15,7 +15,8 @@ public class DocumentService : IDocumentService
     {
         _strategies = new Dictionary<DocumentExtension, IDocumentStrategy>
         {
-            { DocumentExtension.XLSX, new ExcelStrategy() }
+            { DocumentExtension.XLSX, new ExcelStrategy() },
+            { DocumentExtension.CSV, new CsvStrategy() }
         };
     }
 

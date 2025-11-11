@@ -23,7 +23,6 @@ services:
       - ConnectionStrings__PostgresqlDbConnection=${ConnectionStrings__PostgresqlDbConnection}
     ports:
       - "8080:8080"
-#      - "8081:8081"
     networks:
       - expense_tracker_network
       - nginxproxy_default

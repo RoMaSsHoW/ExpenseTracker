@@ -38,7 +38,7 @@ public class ExcelStrategy : IDocumentStrategy
         foreach (var row in worksheet.Rows().Skip(1))
         {
             var name = row.Cell(1).GetValue<string>()?.Trim();
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name) || name.StartsWith("Итого"))
                 continue;
             
             var amountIncome = row.Cell(2).GetValue<double?>();

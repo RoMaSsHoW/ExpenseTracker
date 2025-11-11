@@ -96,14 +96,14 @@ public class TransactionController : BaseApiController
     [HttpGet("export-transactions")]
     public async Task<IActionResult> ExportTransactions(
         [FromQuery] FilterForGetAllTransactionInDocument filter,
-        [FromQuery] int documentExtensionId = 1)
+        [FromQuery] int DocumentExtensionId = 1)
     {
         try
         {   
             var query = new GetAllTransactionsQuery(filter);
             var result = await Mediator.Send(query);
 
-            var format = Enumeration.FromId<DocumentExtension>(documentExtensionId);
+            var format = Enumeration.FromId<DocumentExtension>(DocumentExtensionId);
             var stream = await _documentService.WriteAsync(result.ToList(), format);
             
             var contentType = format.Name == DocumentExtension.CSV.Name ? "text/csv" : 
@@ -121,11 +121,11 @@ public class TransactionController : BaseApiController
     }
 
     [HttpGet("get-import-template")]
-    public async Task<IActionResult> GetImportTemplate([FromQuery] int documentExtensionId = 1)
+    public async Task<IActionResult> GetImportTemplate([FromQuery] int DocumentExtensionId = 1)
     {
         try
         {
-            var format = Enumeration.FromId<DocumentExtension>(documentExtensionId);
+            var format = Enumeration.FromId<DocumentExtension>(DocumentExtensionId);
             var stream = await _documentService.GetTemplateAsync(format);
             
             var contentType = format.Name == DocumentExtension.CSV.Name ? "text/csv" : 
