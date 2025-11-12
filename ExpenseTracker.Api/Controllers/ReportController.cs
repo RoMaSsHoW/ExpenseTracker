@@ -28,4 +28,21 @@ public class ReportController : BaseApiController
             return StatusCode(response.StatusCode, response);
         }
     }
+
+    [HttpGet("get-monthly-savings")]
+    public async Task<IActionResult> GetMonthlySavings()
+    {
+        try
+        {
+            var query = new GetMonthlySavingQuery();
+            var result = await Mediator.Send(query);
+            var response = Response<IEnumerable<MonthlySavingsReportDTO>>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
 }
