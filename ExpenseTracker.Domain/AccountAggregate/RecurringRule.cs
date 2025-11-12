@@ -23,7 +23,7 @@ public class RecurringRule : Entity
         CategoryId = categoryId;
         Type = Enumeration.FromId<TransactionType>(transactionTypeId);
         Frequency = Enumeration.FromId<RecurringFrequency>(recurringFrequencyId);
-        NextRunAt = startDate.Date == DateTime.UtcNow.Date ? CalculateNextRun(startDate) : startDate;
+        NextRunAt = startDate.Date == DateTime.UtcNow.Date ? startDate.AddDays(1) : startDate;
         AccountId = accountId;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;
