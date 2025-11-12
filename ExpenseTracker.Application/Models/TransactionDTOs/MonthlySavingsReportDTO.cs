@@ -2,8 +2,8 @@ namespace ExpenseTracker.Application.Models.TransactionDTOs;
 
 public class MonthlySavingsReportDTO
 {
-    public DateTime Month { get; set; }
-    public decimal Income { get; set; }
-    public decimal Expense { get; set; }
-    public decimal Savings { get; set; }
+    public DateTime Month { get; init; }
+    public decimal Income { get; init; }
+    public decimal Expense { get; init; }
+    public decimal Savings { get; init; }
 }

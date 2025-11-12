@@ -1,5 +1,7 @@
 using ExpenseTracker.Application.Models;
+using ExpenseTracker.Application.Models.CategoryDTOs;
 using ExpenseTracker.Application.Models.TransactionDTOs;
+using ExpenseTracker.Application.Queries.CategoryQueries;
 using ExpenseTracker.Application.Queries.TransactionQueries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +39,23 @@ public class ReportController : BaseApiController
             var query = new GetMonthlySavingQuery();
             var result = await Mediator.Send(query);
             var response = Response<IEnumerable<MonthlySavingsReportDTO>>.Success(result);
+            return StatusCode(response.StatusCode, response);
+        }
+        catch (Exception ex)
+        {
+            var response = Response<object>.Fail(ex.Message, 401);
+            return StatusCode(response.StatusCode, response);
+        }
+    }
+
+    [HttpGet("get-top-categories")]
+    public async Task<IActionResult> GetTopCategories()
+    {
+        try
+        {
+            var query = new GetTopCategoriesQuery();
+            var result = await Mediator.Send(query);
+            var response = Response<IEnumerable<TopCategoryDTO>>.Success(result);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
