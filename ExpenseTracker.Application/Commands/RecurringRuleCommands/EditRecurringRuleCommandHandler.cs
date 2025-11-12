@@ -43,7 +43,7 @@ public class EditRecurringRuleCommandHandler : ICommandHandler<EditRecurringRule
         recurringRule.ChangeAmount(recurringRuleDto.Amount);
         recurringRule.ChangeCategory(recurringRuleDto.CategoryId);
         recurringRule.ChangeType(recurringRuleDto.TypeId);
-        recurringRule.ChangeFrequency(recurringRuleDto.FrequencyId);
+        recurringRule.ChangeFrequency(recurringRuleDto.RecurringFrequencyId);
         recurringRule.ChangeNextRunAt(recurringRuleDto.NextRunAt);
 
         await _unitOfWork.CommitAsync(cancellationToken);

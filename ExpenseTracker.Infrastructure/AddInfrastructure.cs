@@ -1,5 +1,7 @@
+using ExpenseTracker.Application;
 using ExpenseTracker.Application.Common.Persistence;
 using ExpenseTracker.Application.Common.Services;
+using ExpenseTracker.Application.Events;
 using ExpenseTracker.Domain.AccountAggregate.Interfaces;
 using ExpenseTracker.Domain.CategoryAggregate.Interfaces;
 using ExpenseTracker.Domain.UserAggregate.Interfaces;
@@ -7,6 +9,7 @@ using ExpenseTracker.Infrastructure.Jobs;
 using ExpenseTracker.Infrastructure.Persistence;
 using ExpenseTracker.Infrastructure.Persistence.Repositories;
 using ExpenseTracker.Infrastructure.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,6 +40,8 @@ public static class AddInfrastructure
         
         ConfigureQuartz(services);
         
+        ConfigureRabbitMq(services, configuration);
+        
         return services;
     }
 
@@ -60,5 +65,33 @@ public static class AddInfrastructure
             opt.WaitForJobsToComplete = true;
         });
     }
+    
+    private static void ConfigureRabbitMq(IServiceCollection services, IConfiguration configuration)
+    {
+        var rabbitSettings = configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
+
+        if (rabbitSettings is null || string.IsNullOrEmpty(rabbitSettings.Host))
+            throw new InvalidOperationException("RabbitMQ settings are not configured properly.");
+
+        services.AddMassTransit(x =>
+        {
+            // Register consumers
+            x.AddConsumers(typeof(UserRegisteredEventHandler).Assembly);
+
+            // Configure RabbitMQ
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                // var uri = new Uri($"rabbitmq://{rabbitSettings.Host}:{rabbitSettings.Port}{rabbitSettings.VirtualHost}");
+
+                cfg.Host(rabbitSettings.Host, (ushort)rabbitSettings.Port, rabbitSettings.VirtualHost, h =>
+                {
+                    h.Username(rabbitSettings.Username);
+                    h.Password(rabbitSettings.Password);
+                });
+
+                cfg.ConfigureEndpoints(context);
+            });
+        });
+    }   
 }
 

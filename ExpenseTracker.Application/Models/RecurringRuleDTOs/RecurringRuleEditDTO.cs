@@ -7,7 +7,7 @@ public class RecurringRuleEditDTO
     public decimal Amount { get; init; }
     public Guid? CategoryId { get; init; }
     public int TypeId { get; init; }
-    public int FrequencyId { get; init; }
+    public int RecurringFrequencyId { get; init; }
     public DateTime NextRunAt { get; init; }
     public bool IsActive { get; init; }
 }

@@ -20,6 +20,11 @@ services:
       - JWTSettings__Issuer=${JWTSettings__Issuer}
       - JWTSettings__Audience=${JWTSettings__Audience}
       - JWTSettings__ExpireTime=${JWTSettings__ExpireTime}
+      - RabbitMqSettings__Host=${RabbitMqSettings__Host}
+      - RabbitMqSettings__Port=${RabbitMqSettings__Port}
+      - RabbitMqSettings__Username=${RabbitMqSettings__Username}
+      - RabbitMqSettings__Password=${RabbitMqSettings__Password}
+      - RabbitMqSettings__VirtualHost=${RabbitMqSettings__VirtualHost}
       - ConnectionStrings__PostgresqlDbConnection=${ConnectionStrings__PostgresqlDbConnection}
     ports:
       - "8080:8080"
@@ -28,6 +33,7 @@ services:
       - nginxproxy_default
     depends_on:
       - postgres_db
+      - broker
     
   postgres_db:
     image: postgres:17
@@ -43,3 +49,15 @@ services:
     networks:
       - expense_tracker_network
     
+  broker:
+    image: rabbitmq:3.13-management
+    container_name: expense_tracker_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RabbitMqSettings__Username}
+      - RABBITMQ_DEFAULT_PASS=${RabbitMqSettings__Password}
+      - RABBITMQ_DEFAULT_VHOST=${RabbitMqSettings__VirtualHost}
+    networks:
+      - expense_tracker_network

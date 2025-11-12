@@ -1,5 +1,6 @@
 using System.Globalization;
 using ExpenseTracker.Domain.SeedWork;
+using ExpenseTracker.Domain.UserAggregate.Events;
 using ExpenseTracker.Domain.UserAggregate.ValueObjects;
 
 namespace ExpenseTracker.Domain.UserAggregate;
@@ -23,6 +24,8 @@ public class User : Entity
         Role = Enumeration.FromId<Role>(roleId);
         RefreshToken = refreshToken;
         CreatedAt = DateTime.UtcNow;
+        
+        AddDomainEvent(new UserRegistered(Id));
     }
     
     public string FirstName { get; private set; }

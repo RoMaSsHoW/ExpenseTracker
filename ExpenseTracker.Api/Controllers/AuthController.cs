@@ -1,3 +1,4 @@
+using ExpenseTracker.Api.Extentions;
 using ExpenseTracker.Application.Commands.AuthCommands;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.AuthDTOs;
@@ -51,7 +52,9 @@ public class AuthController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 401);
             return StatusCode(response.StatusCode, response);
         }
     }
