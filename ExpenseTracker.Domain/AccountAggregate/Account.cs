@@ -44,8 +44,8 @@ public class Account : Entity
     {
         if (string.IsNullOrEmpty(name))
             throw new ArgumentNullException(nameof(name), "Name cannot be null or empty");
-        if (balance < 0)
-            throw new ArgumentOutOfRangeException(nameof(balance), balance, $"Account balance cannot be negative.");
+        // if (balance < 0)
+            // throw new ArgumentOutOfRangeException(nameof(balance), balance, $"Account balance cannot be negative.");
         
         if (existingAccounts is null)
             throw new ArgumentNullException(nameof(existingAccounts));
@@ -68,6 +68,18 @@ public class Account : Entity
                 "Стартовый баланс",
                 balance,
                 TransactionType.Income.Id,
+                TransactionSource.Manual.Id,
+                DateTime.UtcNow,
+                null,
+                null
+            );
+        }
+        else if (balance < 0)
+        {
+            account.AddTransaction(
+                "Стартовый баланс",
+                Math.Abs(balance),
+                TransactionType.Expense.Id,
                 TransactionSource.Manual.Id,
                 DateTime.UtcNow,
                 null,
@@ -112,8 +124,8 @@ public class Account : Entity
         if (amount <= 0)
             throw new ArgumentOutOfRangeException(nameof(amount), amount, "Withdrawal amount must be greater than zero.");
 
-        if (amount > Balance)
-            throw new InvalidOperationException("Insufficient funds for withdrawal.");
+        // if (amount > Balance)
+            // throw new InvalidOperationException("Insufficient funds for withdrawal.");
 
         Balance -= amount;
     }
