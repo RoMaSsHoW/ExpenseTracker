@@ -1,8 +1,8 @@
 ﻿networks:
   expense_tracker_network:
     driver: bridge
-#  nginxproxy_default:
-#    external: true
+  nginxproxy_default:
+    external: true
 
 volumes:
   expense_tracker_data:
@@ -30,7 +30,7 @@ services:
       - "8080:8080"
     networks:
       - expense_tracker_network
-#      - nginxproxy_default
+      - nginxproxy_default
     depends_on:
       - postgres_db
       - broker
@@ -61,4 +61,4 @@ services:
       - RABBITMQ_DEFAULT_VHOST=${RabbitMqSettings__VirtualHost}
     networks:
       - expense_tracker_network
-#      - nginxproxy_default
+      - nginxproxy_default
