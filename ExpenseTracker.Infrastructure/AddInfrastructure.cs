@@ -33,7 +33,6 @@ public static class AddInfrastructure
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<Seeder>();
         
         services.AddTransient<ITokenService, TokenService>();
         services.AddTransient<IDocumentService, DocumentService>();

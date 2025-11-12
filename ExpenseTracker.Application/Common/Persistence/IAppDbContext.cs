@@ -17,6 +17,5 @@ public interface IAppDbContext
     ChangeTracker ChangeTracker { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
     Task MigrateAsync();
 }

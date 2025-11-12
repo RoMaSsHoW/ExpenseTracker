@@ -3,7 +3,6 @@ using ExpenseTracker.Domain.AccountAggregate;
 using ExpenseTracker.Domain.CategoryAggregate;
 using ExpenseTracker.Domain.UserAggregate;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace ExpenseTracker.Infrastructure.Persistence;
 
@@ -33,10 +32,5 @@ public class AppDbContext : DbContext, IAppDbContext
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return base.SaveChangesAsync(cancellationToken);
-    }
-
-    public override EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
-    {
-        return base.Entry(entity);
     }
 }
