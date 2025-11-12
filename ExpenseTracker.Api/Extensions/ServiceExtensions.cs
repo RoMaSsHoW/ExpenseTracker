@@ -30,6 +30,7 @@ public static class ServiceExtensions
         services.AddApplicationServices(configuration);
         
         services.AddTransient<AuthorizationFixMiddleware>();
+        services.AddTransient<ExceptionHandlingMiddleware>();
 
         return services;
     }
@@ -82,7 +83,7 @@ public static class ServiceExtensions
                         context.Response.ContentType = "application/json";
 
                         var response = Response<object>.Fail(
-                            "Unauthorized: токен отсутствует, просрочен или недействителен.",
+                            "Unauthorized: token is missing, expired, or invalid.",
                             StatusCodes.Status401Unauthorized
                         );
 
@@ -100,7 +101,7 @@ public static class ServiceExtensions
                         context.Response.ContentType = "application/json";
 
                         var response = Response<object>.Fail(
-                            "Forbidden: у вас нет доступа к этому ресурсу.",
+                            "Forbidden: you do not have access to this resource.",
                             StatusCodes.Status403Forbidden
                         );
 

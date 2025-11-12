@@ -61,3 +61,4 @@ services:
       - RABBITMQ_DEFAULT_VHOST=${RabbitMqSettings__VirtualHost}
     networks:
       - expense_tracker_network
+      - nginxproxy_default
