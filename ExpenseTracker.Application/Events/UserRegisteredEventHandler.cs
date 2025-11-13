@@ -45,7 +45,7 @@ public class UserRegisteredEventHandler : IDomainEventHandler<UserRegistered>
         var cashAccount = Account.Create(
             accountsList,
             "Наличные",
-            balance: 0,
+            0,
             Currency.UZS.Id,
             userId,
             requestedAsDefault: true);
@@ -56,7 +56,7 @@ public class UserRegisteredEventHandler : IDomainEventHandler<UserRegistered>
         var visaAccount = Account.Create(
             accountsList,
             "Карта VISA",
-            balance: 0,
+            0,
             Currency.USD.Id,
             userId,
             requestedAsDefault: false);

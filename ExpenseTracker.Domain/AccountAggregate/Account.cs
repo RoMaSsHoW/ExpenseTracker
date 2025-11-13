@@ -12,14 +12,13 @@ public class Account : Entity
 
     private Account(
         string name,
-        decimal balance,
-        int currencyId,
+        Currency currency,
         Guid userId,
         bool isDefault)
     {
         Name = FormatName(name);
-        Balance = balance;
-        Currency = Enumeration.FromId<Currency>(currencyId);
+        Balance = 0;
+        Currency = currency ?? throw new ArgumentNullException(nameof(currency));
         UserId = userId;
         IsDefault = isDefault;
         CreatedAt = DateTime.UtcNow;
@@ -35,57 +34,25 @@ public class Account : Entity
     public IReadOnlyCollection<RecurringRule> RecurringRules => _recurringRules.AsReadOnly();
 
     public static Account Create(
-        IEnumerable<Account> existingAccounts,
+        List<Account> existingAccounts,
         string name,
-        decimal balance,
+        decimal initialBalance,
         int currencyId,
         Guid userId,
         bool requestedAsDefault)
     {
-        if (string.IsNullOrEmpty(name))
-            throw new ArgumentNullException(nameof(name), "Name cannot be null or empty");
-        // if (balance < 0)
-            // throw new ArgumentOutOfRangeException(nameof(balance), balance, $"Account balance cannot be negative.");
+        ValidateCreationParameters(name, existingAccounts);
         
-        if (existingAccounts is null)
-            throw new ArgumentNullException(nameof(existingAccounts));
-        
+        var currency = Enumeration.FromId<Currency>(currencyId);
         var isDefault = !existingAccounts.Any() || requestedAsDefault;
 
         if (isDefault && existingAccounts.Any(a => a.IsDefault))
             UnsetCurrentDefault(existingAccounts);
         
-        var account = new Account(
-            name, 
-            0,
-            currencyId,
-            userId,
-            isDefault);
+        var account = new Account(name, currency, userId, isDefault);
 
-        if (balance > 0)
-        {
-            account.AddTransaction(
-                "Стартовый баланс",
-                balance,
-                TransactionType.Income.Id,
-                TransactionSource.Manual.Id,
-                DateTime.UtcNow,
-                null,
-                null
-            );
-        }
-        else if (balance < 0)
-        {
-            account.AddTransaction(
-                "Стартовый баланс",
-                Math.Abs(balance),
-                TransactionType.Expense.Id,
-                TransactionSource.Manual.Id,
-                DateTime.UtcNow,
-                null,
-                null
-            );
-        }
+        if(initialBalance != 0) 
+            account.RecordInitialBalance(initialBalance);
 
         return account;
     }
@@ -107,27 +74,6 @@ public class Account : Entity
             UnsetCurrentDefault(existingAccounts);
         
         IsDefault = true;   
-    }
-    
-    private void UnsetAsDefault() => IsDefault = false;
-    
-    internal void Deposit(decimal amount)
-    {
-        if (amount <= 0)
-            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Deposit amount must be greater than zero.");
-
-        Balance += amount;
-    }
-    
-    internal void Withdraw(decimal amount)
-    {
-        if (amount <= 0)
-            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Withdrawal amount must be greater than zero.");
-
-        // if (amount > Balance)
-            // throw new InvalidOperationException("Insufficient funds for withdrawal.");
-
-        Balance -= amount;
     }
 
     public Transaction AddTransaction(
@@ -204,6 +150,20 @@ public class Account : Entity
         _recurringRules.Remove(rule);
     }
     
+    private void UnsetAsDefault() => IsDefault = false;
+    
+    private static void ValidateCreationParameters(string name, IEnumerable<Account> existingAccounts)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Name cannot be null or empty.", nameof(name));
+        
+        if (existingAccounts is null)
+            throw new ArgumentNullException(nameof(existingAccounts));
+        
+        // if (balance < 0)
+        // throw new ArgumentOutOfRangeException(nameof(balance), balance, $"Account balance cannot be negative.");
+    }
+    
     private static string FormatName(string name) =>
         CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
     
@@ -211,5 +171,42 @@ public class Account : Entity
     {
         var currentDefault = existingAccounts.FirstOrDefault(a => a.IsDefault);
         currentDefault!.UnsetAsDefault();
+    }
+    
+    private void RecordInitialBalance(decimal initialBalance)
+    {
+        var transactionType = initialBalance > 0 
+            ? TransactionType.Income.Id 
+            : TransactionType.Expense.Id;
+        
+        AddTransaction(
+            "Стартовый баланс",
+            Math.Abs(initialBalance),
+            transactionType,
+            TransactionSource.Manual.Id,
+            DateTime.UtcNow,
+            null,
+            null);
+    }
+    
+    private void Deposit(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, 
+                "Deposit amount must be greater than zero.");
+
+        Balance += amount;
+    }
+    
+    private void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, 
+                "Withdrawal amount must be greater than zero.");
+
+        // if (amount > Balance)
+        // throw new InvalidOperationException("Insufficient funds for withdrawal.");
+
+        Balance -= amount;
     }
 }

@@ -32,7 +32,7 @@ public class CreateAccountCommandHandler : ICommandHandler<CreateAccountCommand,
         var newAccountDto = request.AccountDto;
 
         var account = Account.Create(
-            existingAccounts,
+            existingAccounts.ToList(),
             newAccountDto.Name,
             newAccountDto.Balance,
             newAccountDto.CurrencyId,
