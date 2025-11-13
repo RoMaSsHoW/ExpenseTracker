@@ -42,7 +42,7 @@ public class EditRecurringRuleCommandHandler : ICommandHandler<EditRecurringRule
         recurringRule.Rename(recurringRuleDto.Name);
         recurringRule.ChangeAmount(recurringRuleDto.Amount);
         recurringRule.ChangeCategory(recurringRuleDto.CategoryId);
-        recurringRule.ChangeType(recurringRuleDto.TypeId);
+        recurringRule.ChangeType(recurringRuleDto.TransactionTypeId);
         recurringRule.ChangeFrequency(recurringRuleDto.RecurringFrequencyId);
         recurringRule.ChangeNextRunAt(recurringRuleDto.NextRunAt);
 
