@@ -41,7 +41,7 @@ public class RecurringRule : Entity
     public Guid AccountId { get; private set; }
     public Account Account { get; private set; }
 
-    public static RecurringRule Create(
+    internal static RecurringRule Create(
         string name,
         decimal amount,
         int currencyId,
