@@ -28,13 +28,13 @@ public class LoginCommandHandler : ICommandHandler<LoginCommand, AuthResponse>
         if (user is null)
             throw new UnauthorizedAccessException("Such user does not exist");
         
-        if (!user.Verify(request.Login.Password))
+        if (!user.VerifyPassword(request.Login.Password))
             throw new UnauthorizedAccessException("Wrong password");
 
         if (string.IsNullOrEmpty(user.RefreshToken.Token) || _tokenService.IsRefreshTokenExpired(user))
         {
             var refreshToken = _tokenService.GenerateRefreshToken();
-            user.ChangeRefreshToken(refreshToken);
+            user.UpdateRefreshToken(refreshToken);
             await _unitOfWork.CommitAsync(cancellationToken);
         }
 

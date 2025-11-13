@@ -12,17 +12,17 @@ public class User : Entity
     private User(
         string firstName,
         string lastName,
-        string email,
-        string password,
-        int roleId,
+        Email email,
+        Password password,
+        Role role,
         RefreshToken refreshToken)
     {
-        FirstName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstName.Trim().ToLower());
-        LastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastName.Trim().ToLower());
-        Email = new Email(email);
-        Password = new Password(password);
-        Role = Enumeration.FromId<Role>(roleId);
-        RefreshToken = refreshToken;
+        FirstName = FormatName(firstName);
+        LastName = FormatName(lastName);
+        Email = email ?? throw new ArgumentNullException(nameof(email));
+        Password = password ?? throw new ArgumentNullException(nameof(password));
+        Role = role ?? throw new ArgumentNullException(nameof(role));
+        RefreshToken = refreshToken ?? throw new ArgumentNullException(nameof(refreshToken));
         CreatedAt = DateTime.UtcNow;
         
         AddDomainEvent(new UserRegistered(Id));
@@ -44,28 +44,31 @@ public class User : Entity
         int roleId,
         RefreshToken refreshToken)
     {
-        if (string.IsNullOrWhiteSpace(firstName))
-            throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
-        if (string.IsNullOrWhiteSpace(lastName))
-            throw new ArgumentException("Last name cannot be null or whitespace.", nameof(lastName));
+        ValidateRegistrationParameters(firstName, lastName);
+        
+        var emailValueObject = new Email(email);
+        var passwordValueObject = new Password(password);
+        var role = Enumeration.FromId<Role>(roleId);
         
         return new User(
             firstName, 
             lastName, 
-            email,
-            password,
-            roleId,
+            emailValueObject,
+            passwordValueObject,
+            role,
             refreshToken);
     }
     
-    public bool Verify(string password)
+    public bool VerifyPassword(string password)
     {
         return BCrypt.Net.BCrypt.Verify(password, Password.PasswordHash);
     }
     
-    public void ChangeRefreshToken(RefreshToken refreshToken)
+    public void UpdateRefreshToken(RefreshToken newRefreshToken)
     {
-        RefreshToken = refreshToken;
+        ArgumentNullException.ThrowIfNull(newRefreshToken);
+
+        RefreshToken = newRefreshToken;
     }
 
     public void ChangeProfileInfo(
@@ -73,11 +76,8 @@ public class User : Entity
         string lastName,
         string email)
     {
-        if (string.IsNullOrWhiteSpace(firstName))
-            throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
-        if (string.IsNullOrWhiteSpace(lastName))
-            throw new ArgumentException("Last name cannot be null or whitespace.", nameof(lastName));
-
+        ValidateProfileParameters(firstName, lastName);
+            
         FirstName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(firstName.Trim().ToLower());
         LastName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastName.Trim().ToLower());
         Email = new Email(email);
@@ -88,9 +88,34 @@ public class User : Entity
         if (string.IsNullOrWhiteSpace(oldPassword))
             throw new ArgumentException("Old password cannot be null or whitespace.", nameof(oldPassword));
 
-        if (!Verify(oldPassword))
+        if (!VerifyPassword(oldPassword))
             throw new UnauthorizedAccessException("Old password is incorrect.");
         
         Password = new Password(newPassword);
+    }
+    
+    private static string FormatName(string name) =>
+        CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
+    
+    private static void ValidateRegistrationParameters(
+        string firstName, 
+        string lastName)
+    {
+        if (string.IsNullOrWhiteSpace(firstName))
+            throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
+        
+        if (string.IsNullOrWhiteSpace(lastName))
+            throw new ArgumentException("Last name cannot be null or whitespace.", nameof(lastName));
+    }
+    
+    private static void ValidateProfileParameters(
+        string firstName, 
+        string lastName)
+    {
+        if (string.IsNullOrWhiteSpace(firstName))
+            throw new ArgumentException("First name cannot be null or whitespace.", nameof(firstName));
+        
+        if (string.IsNullOrWhiteSpace(lastName))
+            throw new ArgumentException("Last name cannot be null or whitespace.", nameof(lastName));
     }
 }

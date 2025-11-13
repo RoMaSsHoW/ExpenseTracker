@@ -28,7 +28,7 @@ public class RefreshAccessTokenCommandHandler : ICommandHandler<RefreshAccessTok
         var user = await ValidateUserAsync(request);
 
         var newRefreshToken = _tokenService.GenerateRefreshToken();
-        user.ChangeRefreshToken(newRefreshToken);
+        user.UpdateRefreshToken(newRefreshToken);
         
         await _unitOfWork.CommitAsync(cancellationToken);
 
