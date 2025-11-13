@@ -53,11 +53,11 @@ public class GetAllTransactionsQueryHandler : IQueryHandler<GetAllTransactionsQu
             sqlBase += " AND t.date <= @DateTo";
             parameters.Add("DateTo", request.Filter.DateTo);
         }
-        else
-        {
-            sqlBase += " AND t.date <= @DateTo";
-            parameters.Add("DateTo", DateTime.UtcNow);
-        }
+        // else
+        // {
+        //     sqlBase += " AND t.date <= @DateTo";
+        //     parameters.Add("DateTo", DateTime.UtcNow);
+        // }
         
         var sql = $@"
             SELECT
