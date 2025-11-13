@@ -10,9 +10,9 @@ public class Transaction : Entity
     private Transaction(
         string name,
         decimal amount,
-        int currencyId,
-        int transactionTypeId,
-        int transactionSourceId,
+        Currency currency,
+        TransactionType type,
+        TransactionSource source,
         Guid accountId,
         DateTime date,
         string? description,
@@ -20,9 +20,9 @@ public class Transaction : Entity
     {
         Name = name;
         Amount = amount;
-        Currency = Enumeration.FromId<Currency>(currencyId);
-        Type =  Enumeration.FromId<TransactionType>(transactionTypeId);
-        Source = Enumeration.FromId<TransactionSource>(transactionSourceId);
+        Currency = currency ?? throw new ArgumentNullException(nameof(currency));
+        Type = type ?? throw new ArgumentNullException(nameof(type));
+        Source = source ?? throw new ArgumentNullException(nameof(source));
         AccountId = accountId;
         Date = date;
         Description = description;
@@ -53,34 +53,25 @@ public class Transaction : Entity
         string? description,
         Guid? categoryId)
     {
+        Validate(name, amount, accountId); 
+        
+        var currency = Enumeration.FromId<Currency>(currencyId);
+        var transactionType = Enumeration.FromId<TransactionType>(transactionTypeId);
+        var transactionSource = Enumeration.FromId<TransactionSource>(transactionSourceId);
         var transactionDate = (date == null || date == default)
             ? DateTime.UtcNow
             : date.Value;
         
-        Validate(name, amount, accountId); 
-        
         return new Transaction(
             name, 
             amount,
-            currencyId,
-            transactionTypeId,
-            transactionSourceId,
+            currency,
+            transactionType,
+            transactionSource,
             accountId,
             transactionDate,
             description,
             categoryId);
-    }
-    
-    private static void Validate(string name, decimal amount, Guid accountId)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Transaction name cannot be null or empty.", nameof(name));
-
-        if (amount <= 0)
-            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Transaction amount must be positive.");
-
-        if (accountId == Guid.Empty)
-            throw new ArgumentException("AccountId must be a valid GUID.", nameof(accountId));
     }
     
     public void Rename(string newName)
@@ -99,5 +90,17 @@ public class Transaction : Entity
     public void UpdateDescription(string? description)
     {
         Description = description?.Trim();
+    }
+    
+    private static void Validate(string name, decimal amount, Guid accountId)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Transaction name cannot be null or empty.", nameof(name));
+
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Transaction amount must be positive.");
+
+        if (accountId == Guid.Empty)
+            throw new ArgumentException("AccountId must be a valid GUID.", nameof(accountId));
     }
 }
