@@ -10,20 +10,20 @@ public class RecurringRule : Entity
     private RecurringRule(
         string name,
         decimal amount,
-        int currencyId,
+        Currency currency,
         Guid? categoryId,
-        int transactionTypeId,
-        int recurringFrequencyId,
+        TransactionType type,
+        RecurringFrequency frequency,
         DateTime startDate,
         Guid accountId)
     {
         Name = name;
         Amount = amount;
-        Currency = Enumeration.FromId<Currency>(currencyId);
+        Currency = currency ?? throw new ArgumentNullException(nameof(currency));
         CategoryId = categoryId;
-        Type = Enumeration.FromId<TransactionType>(transactionTypeId);
-        Frequency = Enumeration.FromId<RecurringFrequency>(recurringFrequencyId);
-        NextRunAt = startDate.Date == DateTime.UtcNow.Date ? startDate.AddDays(1) : startDate;
+        Type = type ?? throw new ArgumentNullException(nameof(type));
+        Frequency = frequency ?? throw new ArgumentNullException(nameof(frequency));
+        NextRunAt = DetermineNextRunDate(startDate);
         AccountId = accountId;
         IsActive = true;
         CreatedAt = DateTime.UtcNow;
@@ -51,27 +51,26 @@ public class RecurringRule : Entity
         DateTime startDate,
         Guid accountId)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name), "Recurring rule name cannot be null or empty.");
-        if (amount <= 0)
-            throw new ArgumentOutOfRangeException(nameof(amount), "Recurring rule amount cannot be zero or negative.");
-        if (startDate.Date < DateTime.UtcNow.Date)
-            throw new ArgumentOutOfRangeException(nameof(startDate), "Start date cannot be in the past.");
+        ValidateCreationParameters(name, amount, startDate);
+        
+        var currency = Enumeration.FromId<Currency>(currencyId);
+        var transactionType = Enumeration.FromId<TransactionType>(transactionTypeId);
+        var frequency = Enumeration.FromId<RecurringFrequency>(recurringFrequencyId);
         
         return new RecurringRule(
             name, 
             amount,
-            currencyId,
+            currency,
             categoryId,
-            transactionTypeId,
-            recurringFrequencyId,
+            transactionType,
+            frequency,
             startDate,
             accountId);
     }
 
-    public void Deactivate() => IsActive = false;
-
     public void Activate() => IsActive = true;
+
+    public void Deactivate() => IsActive = false;
 
     public void Rename(string newName)
     {
@@ -129,6 +128,15 @@ public class RecurringRule : Entity
         NextRunAt = CalculateNextRun(NextRunAt);
     }
     
+    private static DateTime DetermineNextRunDate(DateTime startDate)
+    {
+        var today = DateTime.UtcNow.Date;
+        
+        return startDate.Date == today 
+            ? startDate.AddDays(1) 
+            : startDate;
+    }
+    
     private DateTime CalculateNextRun(DateTime fromDate) =>
         Frequency switch
         {
@@ -137,4 +145,19 @@ public class RecurringRule : Entity
             var t when Equals(t, RecurringFrequency.Monthly) => fromDate.AddMonths(1),
             _ => throw new ArgumentException("Unsupported recurring frequency")
         };
+    
+    private static void ValidateCreationParameters(
+        string name, 
+        decimal amount, 
+        DateTime startDate)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentNullException(nameof(name), "Recurring rule name cannot be null or empty.");
+        
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), "Recurring rule amount cannot be zero or negative.");
+        
+        if (startDate.Date < DateTime.UtcNow.Date)
+            throw new ArgumentOutOfRangeException(nameof(startDate), "Start date cannot be in the past.");
+    }
 }
