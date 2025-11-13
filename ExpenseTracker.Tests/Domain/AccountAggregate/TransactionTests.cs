@@ -33,197 +33,151 @@ public class TransactionTests
         Assert.Equal(_accountId, tx.AccountId);
     }
     
-    // [Theory]
-    // [InlineData(null)]
-    // [InlineData("")]
-    // [InlineData("   ")]
-    // public void Create_WithInvalidName_ShouldThrowArgumentException(string invalidName)
-    // {
-    //     // Act & Assert
-    //     var act = () => Transaction.Create(
-    //         name: invalidName!,
-    //         amount: 100m,
-    //         currencyId: Currency.USD.Id,
-    //         transactionTypeId: TransactionType.Income.Id,
-    //         transactionSourceId: TransactionSource.Manual.Id,
-    //         accountId: _accountId,
-    //         date: null,
-    //         description: null,
-    //         categoryId: null);
-    //
-    //     act.Should().Throw<ArgumentException>()
-    //         .WithMessage("*Transaction name cannot be null or empty.*");
-    // }
-    //
-    // [Theory]
-    // [InlineData(0)]
-    // [InlineData(-50)]
-    // public void Create_WithNonPositiveAmount_ShouldThrowArgumentOutOfRangeException(decimal invalidAmount)
-    // {
-    //     // Act & Assert
-    //     var act = () => Transaction.Create(
-    //         name: "Тест",
-    //         amount: invalidAmount,
-    //         currencyId: Currency.USD.Id,
-    //         transactionTypeId: TransactionType.Income.Id,
-    //         transactionSourceId: TransactionSource.Manual.Id,
-    //         accountId: _accountId,
-    //         date: null,
-    //         description: null,
-    //         categoryId: null);
-    //
-    //     act.Should().Throw<ArgumentOutOfRangeException>()
-    //         .WithMessage("*Transaction amount must be positive.*");
-    // }
-    //
-    // [Fact]
-    // public void Create_WithEmptyAccountId_ShouldThrowArgumentException()
-    // {
-    //     // Act & Assert
-    //     var act = () => Transaction.Create(
-    //         name: "Тест",
-    //         amount: 100m,
-    //         currencyId: Currency.USD.Id,
-    //         transactionTypeId: TransactionType.Income.Id,
-    //         transactionSourceId: TransactionSource.Manual.Id,
-    //         accountId: Guid.Empty,
-    //         date: null,
-    //         description: null,
-    //         categoryId: null);
-    //
-    //     act.Should().Throw<ArgumentException>()
-    //         .WithMessage("*AccountId must be a valid GUID.*");
-    // }
-    //
-    // [Fact]
-    // public void Rename_WithValidName_ShouldUpdateName()
-    // {
-    //     // Arrange
-    //     var transaction = CreateSampleTransaction();
-    //
-    //     // Act
-    //     transaction.Rename("Новая покупка");
-    //
-    //     // Assert
-    //     transaction.Name.Should().Be("Новая покупка");
-    // }
-    //
-    // [Theory]
-    // [InlineData(null)]
-    // [InlineData("")]
-    // [InlineData("   ")]
-    // public void Rename_WithInvalidName_ShouldThrowArgumentException(string invalidName)
-    // {
-    //     // Arrange
-    //     var transaction = CreateSampleTransaction();
-    //
-    //     // Act & Assert
-    //     var act = () => transaction.Rename(invalidName!);
-    //
-    //     act.Should().Throw<ArgumentException>()
-    //         .WithMessage("*New name cannot be null or empty.*");
-    // }
-    //
-    // [Fact]
-    // public void ChangeCategory_ShouldUpdateCategoryId()
-    // {
-    //     // Arrange
-    //     var transaction = CreateSampleTransaction();
-    //     var newCategoryId = Guid.NewGuid();
-    //
-    //     // Act
-    //     transaction.ChangeCategory(newCategoryId);
-    //
-    //     // Assert
-    //     transaction.CategoryId.Should().Be(newCategoryId);
-    // }
-    //
-    // [Fact]
-    // public void ChangeCategory_ToNull_ShouldSetCategoryIdToNull()
-    // {
-    //     // Arrange
-    //     var categoryId = Guid.NewGuid();
-    //     var transaction = Transaction.Create(
-    //         name: "Тест",
-    //         amount: 100m,
-    //         currencyId: Currency.USD.Id,
-    //         transactionTypeId: TransactionType.Expense.Id,
-    //         transactionSourceId: TransactionSource.Manual.Id,
-    //         accountId: _accountId,
-    //         date: null,
-    //         description: null,
-    //         categoryId: categoryId);
-    //
-    //     // Act
-    //     transaction.ChangeCategory(null);
-    //
-    //     // Assert
-    //     transaction.CategoryId.Should().BeNull();
-    // }
-    //
-    // [Theory]
-    // [InlineData("  Описание  ", "Описание")]
-    // [InlineData("Полное описание", "Полное описание")]
-    // [InlineData(null, null)]
-    // [InlineData("", null)]
-    // [InlineData("   ", null)]
-    // public void UpdateDescription_ShouldTrimAndSetDescription(string input, string expected)
-    // {
-    //     // Arrange
-    //     var transaction = CreateSampleTransaction();
-    //
-    //     // Act
-    //     transaction.UpdateDescription(input);
-    //
-    //     // Assert
-    //     transaction.Description.Should().Be(expected);
-    // }
-    //
-    // [Fact]
-    // public void Create_ViaAccountAddTransaction_ShouldCreateAndUpdateBalance()
-    // {
-    //     // Arrange
-    //     var userId = Guid.NewGuid();
-    //     var account = Account.Create(
-    //         existingAccounts: new List<Account>(),
-    //         name: "Кошелёк",
-    //         initialBalance: 1000m,
-    //         currencyId: Currency.USD.Id,
-    //         userId: userId,
-    //         requestedAsDefault: true);
-    //
-    //     // Act
-    //     var transaction = account.AddTransaction(
-    //         name: "Кофе",
-    //         amount: 5.5m,
-    //         transactionTypeId: TransactionType.Expense.Id,
-    //         transactionSourceId: TransactionSource.Manual.Id,
-    //         date: _fixedDate,
-    //         description: "Утренний кофе",
-    //         categoryId: null);
-    //
-    //     // Assert
-    //     transaction.Should().NotBeNull();
-    //     transaction.Name.Should().Be("Кофе");
-    //     transaction.Amount.Should().Be(5.5m);
-    //     transaction.Type.Should().Be(TransactionType.Expense);
-    //     transaction.Date.Should().Be(_fixedDate);
-    //     account.Balance.Should().Be(1000m - 5.5m);
-    //     account.Transactions.Should().Contain(transaction);
-    // }
-    //
-    // // Вспомогательный метод
-    // private Transaction CreateSampleTransaction()
-    // {
-    //     return Transaction.Create(
-    //         name: "Начальная транзакция",
-    //         amount: 100m,
-    //         currencyId: Currency.USD.Id,
-    //         transactionTypeId: TransactionType.Income.Id,
-    //         transactionSourceId: TransactionSource.Manual.Id,
-    //         accountId: _accountId,
-    //         date: _fixedDate,
-    //         description: "Тест",
-    //         categoryId: null);
-    // }
+    [Fact]
+    public void Create_WithEmptyAccountId_ShouldThrowArgumentException()
+    {
+        // Act & Assert & Assert
+        Assert.Throws<ArgumentException>(() => Transaction.Create(
+            "Тест",
+            100m,
+            Currency.USD.Id,
+            TransactionType.Income.Id,
+            TransactionSource.Manual.Id,
+            Guid.Empty,
+            null,
+            null,
+            null));
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Create_WithInvalidName_ShouldThrowArgumentException(string invalidName)
+    {
+        // Act & Assert & Assert
+        Assert.Throws<ArgumentException>(() => Transaction.Create(
+            invalidName,
+            100m,
+            Currency.USD.Id,
+            TransactionType.Income.Id,
+            TransactionSource.Manual.Id,
+            Guid.Empty,
+            null,
+            null,
+            null));
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-50)]
+    public void Create_WithNonPositiveAmount_ShouldThrowArgumentOutOfRangeException(decimal invalidAmount)
+    {
+        // Act & Assert & Assert
+        Assert.Throws<ArgumentOutOfRangeException>(() => Transaction.Create(
+            "Тест",
+            invalidAmount,
+            Currency.USD.Id,
+            TransactionType.Income.Id,
+            TransactionSource.Manual.Id,
+            Guid.Empty,
+            null,
+            null,
+            null));
+    }
+    
+    [Fact]
+    public void Rename_WithValidName_ShouldUpdateName()
+    {
+        // Arrange
+        var transaction = CreateSampleTransaction();
+    
+        // Act
+        transaction.Rename("Новая покупка");
+    
+        // Assert
+        Assert.Equal("Новая покупка",  transaction.Name);
+    }
+    
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Rename_WithInvalidName_ShouldThrowArgumentException(string invalidName)
+    {
+        // Arrange
+        var transaction = CreateSampleTransaction();
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => transaction.Rename(invalidName!));
+    }
+    
+    [Fact]
+    public void ChangeCategory_ShouldUpdateCategoryId()
+    {
+        // Arrange
+        var transaction = CreateSampleTransaction();
+        var newCategoryId = Guid.NewGuid();
+    
+        // Act
+        transaction.ChangeCategory(newCategoryId);
+    
+        // Assert
+        Assert.Equal(newCategoryId, transaction.CategoryId);
+    }
+    
+    [Fact]
+    public void ChangeCategory_ToNull_ShouldSetCategoryIdToNull()
+    {
+        // Arrange
+        var categoryId = Guid.NewGuid();
+        var transaction = Transaction.Create(
+            name: "Тест",
+            amount: 100m,
+            currencyId: Currency.USD.Id,
+            transactionTypeId: TransactionType.Expense.Id,
+            transactionSourceId: TransactionSource.Manual.Id,
+            accountId: _accountId,
+            date: null,
+            description: null,
+            categoryId: categoryId);
+    
+        // Act
+        transaction.ChangeCategory(null);
+    
+        // Assert
+        Assert.Equal(categoryId, transaction.CategoryId);
+    }
+    
+    [Theory]
+    [InlineData("  Описание  ", "Описание")]
+    [InlineData("Полное описание", "Полное описание")]
+    [InlineData(null, null)]
+    [InlineData("", null)]
+    [InlineData("   ", null)]
+    public void UpdateDescription_ShouldTrimAndSetDescription(string input, string expected)
+    {
+        // Arrange
+        var transaction = CreateSampleTransaction();
+    
+        // Act
+        transaction.UpdateDescription(input);
+    
+        // Assert
+        Assert.Equal(expected, transaction.Description);
+    }
+    
+    private Transaction CreateSampleTransaction()
+    {
+        return Transaction.Create(
+            "Начальная транзакция",
+            100m,
+            Currency.USD.Id,
+            TransactionType.Income.Id,
+            TransactionSource.Manual.Id,
+            _accountId,
+            _fixedDate,
+            "Тест",
+            null);
+    }
 }

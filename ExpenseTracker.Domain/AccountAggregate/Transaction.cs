@@ -89,7 +89,10 @@ public class Transaction : Entity
 
     public void UpdateDescription(string? description)
     {
-        Description = description?.Trim();
+        if (string.IsNullOrWhiteSpace(description) || string.IsNullOrEmpty(description))
+            Description = null;
+        else
+            Description = description?.Trim();
     }
     
     private static void Validate(string name, decimal amount, Guid accountId)
