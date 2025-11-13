@@ -69,11 +69,11 @@ public class GetAllPaginatedTransactionsQueryHandler : IQueryHandler<GetAllPagin
             sqlBase += " AND t.date <= @DateTo";
             parameters.Add("DateTo", request.Filter.DateTo);
         }
-        else
-        {
-            sqlBase += " AND t.date <= @DateTo";
-            parameters.Add("DateTo", DateTime.UtcNow);
-        }
+        // else
+        // {
+            // sqlBase += " AND t.date <= @DateTo";
+            // parameters.Add("DateTo", DateTime.UtcNow);
+        // }
 
         var countSql = $"SELECT COUNT(*) {sqlBase}";
         var totalCount = await _dbConnection.ExecuteScalarAsync<int>(countSql, parameters);
