@@ -108,7 +108,7 @@ public class RecurringRule : Entity
         if (newNextRunAt.Date < DateTime.UtcNow.Date)
             throw new ArgumentOutOfRangeException(nameof(newNextRunAt), "Start date cannot be in the past.");
 
-        NextRunAt = newNextRunAt.Date == DateTime.UtcNow.Date ? CalculateNextRun(newNextRunAt) : newNextRunAt;
+        NextRunAt = DetermineNextRunDate(newNextRunAt);
     }
     
     public void CreateAutoTransaction()

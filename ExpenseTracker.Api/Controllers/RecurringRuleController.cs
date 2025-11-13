@@ -1,3 +1,4 @@
+using ExpenseTracker.Api.Extentions;
 using ExpenseTracker.Application.Commands.RecurringRuleCommands;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.RecurringRuleDTOs;
@@ -27,7 +28,9 @@ public class RecurringRuleController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -39,12 +42,14 @@ public class RecurringRuleController : BaseApiController
         {
             var command = new CreateRecurringRuleCommand(recurringRule);
             var result = await Mediator.Send(command);
-            var response = Response<RecurringRuleViewDTO>.Success(result);
+            var response = Response<RecurringRuleViewDTO>.Success(result, 201);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -61,7 +66,9 @@ public class RecurringRuleController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -73,12 +80,14 @@ public class RecurringRuleController : BaseApiController
         {
             var command = new DeleteRecurringRuleCommand(recurringRule);
             await Mediator.Send(command);
-            var response = Response<object>.Success();
+            var response = Response<object>.Success(204, "RecurringRule deleted successfully");
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }

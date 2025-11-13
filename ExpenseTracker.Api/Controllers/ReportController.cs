@@ -1,3 +1,4 @@
+using ExpenseTracker.Api.Extentions;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.CategoryDTOs;
 using ExpenseTracker.Application.Models.TransactionDTOs;
@@ -26,7 +27,9 @@ public class ReportController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -43,7 +46,9 @@ public class ReportController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -60,7 +65,9 @@ public class ReportController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }
     }

@@ -37,7 +37,9 @@ public class TransactionController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -49,12 +51,14 @@ public class TransactionController : BaseApiController
         {
             var command = new CreateTransactionCommand(transaction);
             var result = await Mediator.Send(command);
-            var response = Response<TransactionViewDTO>.Success(result);
+            var response = Response<TransactionViewDTO>.Success(result, 201);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -71,7 +75,9 @@ public class TransactionController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -83,12 +89,14 @@ public class TransactionController : BaseApiController
         {
             var command = new DeleteTransactionCommand(transaction);
             await Mediator.Send(command);
-            var response = Response<object>.Success();
+            var response = Response<object>.Success(204, "Transaction deleted successfully");
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -115,7 +123,9 @@ public class TransactionController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }        
     }
@@ -137,7 +147,9 @@ public class TransactionController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }        
     }
@@ -149,14 +161,14 @@ public class TransactionController : BaseApiController
         {
             var command = new CreateTransactionsFromFileCommand(file);
             await Mediator.Send(command);
-            var response = Response<object>.Success();
+            var response = Response<object>.Success(201);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
             var allErrors = ex.GetAllMessages();
             
-            var response = Response<object>.Fail(allErrors, 401);
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }

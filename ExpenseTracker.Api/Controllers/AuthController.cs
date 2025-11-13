@@ -35,7 +35,9 @@ public class AuthController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 401);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -47,14 +49,14 @@ public class AuthController : BaseApiController
         {
             var command = new RegistrationCommand(registerDto);
             var result = await Mediator.Send(command);
-            var response = Response<AuthResponse>.Success(result, "Success", 201);
+            var response = Response<AuthResponse>.Success(result, 201);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
             var allErrors = ex.GetAllMessages();
             
-            var response = Response<object>.Fail(allErrors, 401);
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -66,12 +68,14 @@ public class AuthController : BaseApiController
         {
             var command = new RefreshAccessTokenCommand(refreshToken);
             var result = await Mediator.Send(command);
-            var response = Response<AuthResponse>.Success(result, "Success", 201);
+            var response = Response<AuthResponse>.Success(result);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message, 401);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 401);
             return StatusCode(response.StatusCode, response);
         }        
     }

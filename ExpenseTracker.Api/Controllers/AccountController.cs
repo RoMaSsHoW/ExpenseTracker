@@ -1,3 +1,4 @@
+using ExpenseTracker.Api.Extentions;
 using ExpenseTracker.Application.Commands.AccountCommands;
 using ExpenseTracker.Application.Models;
 using ExpenseTracker.Application.Models.AccountDTOs;
@@ -27,7 +28,9 @@ public class AccountController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors, 500);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -39,12 +42,14 @@ public class AccountController : BaseApiController
         {
             var command = new CreateAccountCommand(accountDto);
             var result = await Mediator.Send(command);
-            var response = Response<AccountViewDTO>.Success(result);
+            var response = Response<AccountViewDTO>.Success(result, 201);
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -61,7 +66,9 @@ public class AccountController : BaseApiController
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }
@@ -73,12 +80,14 @@ public class AccountController : BaseApiController
         {
             var command = new DeleteAccountCommand(accountDto);
             await Mediator.Send(command);
-            var response = Response<object>.Success();
+            var response = Response<object>.Success(204, "Account deleted successfully");
             return StatusCode(response.StatusCode, response);
         }
         catch (Exception ex)
         {
-            var response = Response<object>.Fail(ex.Message);
+            var allErrors = ex.GetAllMessages();
+            
+            var response = Response<object>.Fail(allErrors);
             return StatusCode(response.StatusCode, response);
         }
     }

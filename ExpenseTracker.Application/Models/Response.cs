@@ -15,13 +15,13 @@ public class Response<T>
     public List<T>? Data { get; init; }
     public List<string>?  Errors { get; init; }
 
-    public static Response<T> Success(List<T> data, string message = "Success", int statusCode = 200)
+    public static Response<T> Success(List<T> data, int statusCode = 200, string message = "Success")
         => new(statusCode, message, data);
     
-    public static Response<T> Success(T data, string message = "Success", int statusCode = 200)
+    public static Response<T> Success(T data, int statusCode = 200, string message = "Success")
         => new(statusCode, message, new List<T>() { data });
     
-    public static Response<T> Success(string message = "Success", int statusCode = 200)
+    public static Response<T> Success(int statusCode = 200, string message = "Success")
         => new(statusCode, message);
 
     public static Response<T> Fail(string errorMessage, int statusCode = 400)
