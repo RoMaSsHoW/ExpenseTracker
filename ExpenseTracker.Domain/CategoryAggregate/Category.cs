@@ -10,12 +10,12 @@ public class Category : Entity
     
     private Category(
         string name,
-        int transactionTypeId,
+        TransactionType type,
         Guid userId,
         bool isDefault)
     {
         Name = FormatName(name);
-        Type = Enumeration.FromId<TransactionType>(transactionTypeId);
+        Type = type ?? throw new ArgumentNullException(nameof(type));
         UserId = userId;
         IsDefault = isDefault;
         CreatedAt = DateTime.UtcNow;
@@ -32,13 +32,11 @@ public class Category : Entity
         int transactionTypeId,
         Guid userId)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Category name cannot be empty.", nameof(name));
-
-        if (userId == Guid.Empty)
-            throw new ArgumentException("Category user id cannot be empty.", nameof(userId));
+        ValidateCreationParameters(name, userId);
         
-        return new Category(name, transactionTypeId, userId, false);
+        var transactionType = Enumeration.FromId<TransactionType>(transactionTypeId);
+        
+        return new Category(name, transactionType, userId, false);
     }
 
     public static Category CreateDefault(
@@ -46,10 +44,11 @@ public class Category : Entity
         int transactionTypeId,
         Guid userId)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Category name cannot be empty.", nameof(name));
+        ValidateCreationParameters(name, userId);
         
-        return new Category(name, transactionTypeId, userId, true);
+        var transactionType = Enumeration.FromId<TransactionType>(transactionTypeId);
+        
+        return new Category(name, transactionType, userId, true);
     }
 
     public void Rename(string newName)
@@ -67,4 +66,13 @@ public class Category : Entity
     
     private static string FormatName(string name) =>
         CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Trim().ToLower());
+    
+    private static void ValidateCreationParameters(string name, Guid userId)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Category name cannot be empty.", nameof(name));
+
+        if (userId == Guid.Empty)
+            throw new ArgumentException("Category user id cannot be empty.", nameof(userId));
+    }
 }
