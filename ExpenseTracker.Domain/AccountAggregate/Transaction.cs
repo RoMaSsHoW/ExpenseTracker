@@ -84,7 +84,10 @@ public class Transaction : Entity
     
     public void ChangeCategory(Guid? newCategoryId)
     {
-        CategoryId = newCategoryId;
+        if (newCategoryId == Guid.Empty || newCategoryId is null)
+            CategoryId = null;
+        else
+            CategoryId = newCategoryId;
     }
 
     public void UpdateDescription(string? description)

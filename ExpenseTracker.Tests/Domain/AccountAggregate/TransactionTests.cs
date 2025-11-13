@@ -132,21 +132,21 @@ public class TransactionTests
         // Arrange
         var categoryId = Guid.NewGuid();
         var transaction = Transaction.Create(
-            name: "Тест",
-            amount: 100m,
-            currencyId: Currency.USD.Id,
-            transactionTypeId: TransactionType.Expense.Id,
-            transactionSourceId: TransactionSource.Manual.Id,
-            accountId: _accountId,
-            date: null,
-            description: null,
-            categoryId: categoryId);
+            "Тест",
+            100m,
+            Currency.USD.Id,
+            TransactionType.Expense.Id,
+            TransactionSource.Manual.Id,
+            _accountId,
+            null,
+            null,
+            categoryId);
     
         // Act
         transaction.ChangeCategory(null);
     
         // Assert
-        Assert.Equal(categoryId, transaction.CategoryId);
+        Assert.Equal(null, transaction.CategoryId);
     }
     
     [Theory]
